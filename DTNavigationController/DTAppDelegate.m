@@ -9,6 +9,7 @@
 #import "DTAppDelegate.h"
 
 #import "DTViewController.h"
+#import "DTNavigationController.h"
 
 @implementation DTAppDelegate
 
@@ -24,7 +25,12 @@
     self.window = [[[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]] autorelease];
     // Override point for customization after application launch.
     self.viewController = [[[DTViewController alloc] initWithNibName:@"DTViewController" bundle:nil] autorelease];
-    self.window.rootViewController = self.viewController;
+    [self.viewController setTitle:@"Main"];
+    
+    DTNavigationController *nav = [DTNavigationController navigationWithRootViewController:self.viewController];
+    [nav.folderBar setBackgroundColor:[UIColor lightGrayColor]];
+    
+    self.window.rootViewController = nav;
     [self.window makeKeyAndVisible];
     return YES;
 }
