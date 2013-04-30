@@ -14,7 +14,6 @@
 		557EE8C3172E7D22004E2695 /* Home.png in Resources */ = {isa = PBXBuildFile; fileRef = 557EE8C2172E7D22004E2695 /* Home.png */; };
 		55810EE4172F732600BC94C3 /* NavigationBar.png in Resources */ = {isa = PBXBuildFile; fileRef = 55810EE2172F732600BC94C3 /* NavigationBar.png */; };
 		55810EE5172F732600BC94C3 /* NavigationBar@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 55810EE3172F732600BC94C3 /* NavigationBar@2x.png */; };
-		55810EE8172FAF2300BC94C3 /* DTFolderViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 55810EE7172FAF2300BC94C3 /* DTFolderViewController.m */; };
 		558868AE172A64D3008FA5A3 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 558868AD172A64D3008FA5A3 /* UIKit.framework */; };
 		558868B0172A64D3008FA5A3 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 558868AF172A64D3008FA5A3 /* Foundation.framework */; };
 		558868B2172A64D3008FA5A3 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 558868B1172A64D3008FA5A3 /* CoreGraphics.framework */; };
@@ -40,8 +39,6 @@
 		557EE8C2172E7D22004E2695 /* Home.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Home.png; sourceTree = "<group>"; };
 		55810EE2172F732600BC94C3 /* NavigationBar.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = NavigationBar.png; sourceTree = "<group>"; };
 		55810EE3172F732600BC94C3 /* NavigationBar@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "NavigationBar@2x.png"; sourceTree = "<group>"; };
-		55810EE6172FAF2300BC94C3 /* DTFolderViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DTFolderViewController.h; sourceTree = "<group>"; };
-		55810EE7172FAF2300BC94C3 /* DTFolderViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DTFolderViewController.m; sourceTree = "<group>"; };
 		558868AA172A64D3008FA5A3 /* DTNavigationController.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = DTNavigationController.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		558868AD172A64D3008FA5A3 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		558868AF172A64D3008FA5A3 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
@@ -156,8 +153,6 @@
 			children = (
 				558868D0172A6509008FA5A3 /* DTNavigationController.h */,
 				558868D1172A6509008FA5A3 /* DTNavigationController.m */,
-				55810EE6172FAF2300BC94C3 /* DTFolderViewController.h */,
-				55810EE7172FAF2300BC94C3 /* DTFolderViewController.m */,
 				558868D3172A7B55008FA5A3 /* DTFolderBar.h */,
 				558868D4172A7B55008FA5A3 /* DTFolderBar.m */,
 				55AC45FB172E0E600091D701 /* DTFolderItem.h */,
@@ -246,7 +241,6 @@
 				558868D5172A7B55008FA5A3 /* DTFolderBar.m in Sources */,
 				554F7609172DFE740035A3B4 /* DTDetailViewController.m in Sources */,
 				55AC45FD172E0E600091D701 /* DTFolderItem.m in Sources */,
-				55810EE8172FAF2300BC94C3 /* DTFolderViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
