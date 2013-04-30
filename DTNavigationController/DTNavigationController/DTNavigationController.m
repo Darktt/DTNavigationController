@@ -160,12 +160,16 @@
 - (void)rotateFolderBar
 {
     CGRect frame = _folderBar.frame;
+    BOOL orientation = !UIInterfaceOrientationIsPortrait([[UIApplication sharedApplication] statusBarOrientation]);
+    UIScreen *screen = [UIScreen mainScreen];
+    CGFloat width = orientation ? screen.bounds.size.height : screen.bounds.size.width;
+    CGFloat hight = orientation ? 44.0f : 32.0f;
     
     if (_folderBar.hidden) {
         frame.origin.x = -self.navigationBar.frame.size.width;
-        frame.size = self.navigationBar.frame.size;
+        frame.size = CGSizeMake(width, hight);
     } else {
-        frame = self.navigationBar.frame;
+        frame = CGRectMake(0, 20, width, hight);
     }
     
     [_folderBar setFrame:frame];
@@ -199,30 +203,14 @@
 
 #pragma mark - Rotation view method
 
-- (BOOL)shouldAutorotate
+- (UIView *)rotatingHeaderView
 {
-//    NSLog(@"%s:%@", __func__, NSStringFromCGRect(self.navigationBar.frame));
-    
-    [self rotateFolderBar];
-    
-    return YES;
-}
-
-- (NSUInteger)supportedInterfaceOrientations
-{
-//    NSLog(@"%s:%@", __func__, NSStringFromCGRect(self.navigationBar.frame));
-    
-    return UIInterfaceOrientationMaskAllButUpsideDown;
+    return _folderBar;
 }
 
 - (void)willRotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation duration:(NSTimeInterval)duration
 {
-//    NSLog(@"%s:%@", __func__, NSStringFromCGRect(self.navigationBar.frame));
-}
-
-- (void)didRotateFromInterfaceOrientation:(UIInterfaceOrientation)fromInterfaceOrientation
-{
-//    NSLog(@"%s:%@", __func__, NSStringFromCGRect(self.navigationBar.frame));
+    [self rotateFolderBar];
 }
 
 @end
