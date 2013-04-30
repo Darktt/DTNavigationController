@@ -30,12 +30,8 @@
     
     if (self == nil) return nil;
     
+    [self.view setAutoresizesSubviews:YES];
     [self.navigationBar setTintColor:[UIColor blackColor]];
-    
-    if (_folderBar == nil)
-    _folderBar = [DTFolderBar folderBarWithFrame:self.navigationBar.frame];
-    
-    [self.view addSubview:_folderBar];
     
     return self;
 }
@@ -44,6 +40,12 @@
 {
     [super viewDidLoad];
 	// Do any additional setup after loading the view.
+    
+    if (_folderBar == nil)
+        _folderBar = [DTFolderBar folderBarWithFrame:self.navigationBar.frame];
+    [_folderBar setAutoresizingMask:self.navigationBar.autoresizingMask];
+    
+    [self.view addSubview:_folderBar];
 }
 
 - (void)dealloc
@@ -65,30 +67,49 @@
 {
     [super pushViewController:viewController animated:animated];
     
-//    NSLog(@"%s", __func__);
-    
     if (_folderBar == nil)
         _folderBar = [DTFolderBar folderBarWithFrame:self.navigationBar.frame];
     
     NSMutableArray *folderItems = [NSMutableArray arrayWithArray:_folderBar.folderItems];
+    DTFolderItem *folderItem = nil;
     
-    DTFolderItem *folderItem = [DTFolderItem itemWithFolderName:viewController.title targer:self action:@selector(tapFolderItem:)];
+    if ([viewController.title isEqualToString:@"Root"]) {
+        folderItem = [DTFolderItem itemWithImage:[UIImage imageNamed:@"Home.png"] targer:self action:@selector(tapFolderItem:)];
+    } else {
+        folderItem = [DTFolderItem itemWithFolderName:viewController.title targer:self action:@selector(tapFolderItem:)];
+    }
+    
+    [folderItem setAutoresizingMask:UIViewAutoresizingFlexibleHeight];
+    [folderItem setAutoresizesSubviews:YES];
+    
     
     [folderItems addObject:folderItem];
     
-    [_folderBar setFolderItems:folderItems animated:NO];
+    [_folderBar setFolderItems:folderItems animated:YES];
 }
 
 - (UIViewController *)popViewControllerAnimated:(BOOL)animated
 {
-//    NSLog(@"%s", __func__);
+    [self setFolderBarHidden:NO animated:YES];
     
     NSMutableArray *folderItems = [NSMutableArray arrayWithArray:self.folderBar.folderItems];
     [folderItems removeLastObject];
     
-    [self.folderBar setFolderItems:folderItems animated:NO];
+    [_folderBar setFolderItems:folderItems animated:NO];
     
     return [super popViewControllerAnimated:animated];
+}
+
+- (NSArray *)popToRootViewControllerAnimated:(BOOL)animated
+{
+    NSMutableArray *folderItems = [NSMutableArray arrayWithArray:self.folderBar.folderItems];
+    NSRange range = NSMakeRange(1, folderItems.count - 1);
+    
+    [folderItems removeObjectsInRange:range];
+    
+    [_folderBar setFolderItems:folderItems animated:YES];
+    
+    return [super popToRootViewControllerAnimated:YES];
 }
 
 - (DTFolderBar *)folderBar
@@ -106,21 +127,23 @@
 - (void)setFolderBarHidden:(BOOL)folderBarHidden animated:(BOOL)animated
 {
     if (animated) {
-        void (^animations) (void) = ^(void){
+        void (^animations) (void) = ^{
             CGRect folderBarFrame = _folderBar.frame;
+            CGFloat width = _folderBar.frame.size.width; //self.navigationBar.frame.size.width;
             
             if (folderBarHidden) {
-                folderBarFrame.origin.x -= _folderBar.frame.size.width;
+                folderBarFrame.origin.x -= width;
             } else {
                 [_folderBar setHidden:folderBarHidden];
-                folderBarFrame.origin.x += _folderBar.frame.size.width;
+                folderBarFrame.origin.x += width;
             }
-                
             
             [_folderBar setFrame:folderBarFrame];
         };
         
-        void (^completion) (BOOL finished) = ^(BOOL finished){ if(folderBarHidden)[self setFolderBarHidden:folderBarHidden]; };
+        void (^completion) (BOOL finished) = ^(BOOL finished){
+            if(folderBarHidden)[self setFolderBarHidden:folderBarHidden];
+        };
         
         [UIView animateWithDuration:UINavigationControllerHideShowBarDuration animations:animations completion:completion];
         return;
@@ -134,12 +157,30 @@
     return [_folderBar isHidden];
 }
 
+- (void)rotateFolderBar
+{
+    CGRect frame = _folderBar.frame;
+    
+    if (_folderBar.hidden) {
+        frame.origin.x = -self.navigationBar.frame.size.width;
+        frame.size = self.navigationBar.frame.size;
+    } else {
+        frame = self.navigationBar.frame;
+    }
+    
+    [_folderBar setFrame:frame];
+}
+
 #pragma mark - Tap Folder Item Method
 
 - (IBAction)tapFolderItem:(DTFolderItem *)sender
 {
     NSMutableArray *folderItems = [NSMutableArray arrayWithArray:_folderBar.folderItems];
     NSUInteger index = [folderItems indexOfObject:sender];
+    
+    if (index == NSNotFound) {
+        return;
+    }
     
     if ((index + 1) == folderItems.count) {
         return;
@@ -149,11 +190,39 @@
     
     [folderItems removeObjectsInRange:range];
     
-    [_folderBar setFolderItems:folderItems];
+    [_folderBar setFolderItems:folderItems animated:YES];
     
     UIViewController *viewComtroller = [self.viewControllers objectAtIndex:index];
     
     [self popToViewController:viewComtroller animated:YES];
+}
+
+#pragma mark - Rotation view method
+
+- (BOOL)shouldAutorotate
+{
+//    NSLog(@"%s:%@", __func__, NSStringFromCGRect(self.navigationBar.frame));
+    
+    [self rotateFolderBar];
+    
+    return YES;
+}
+
+- (NSUInteger)supportedInterfaceOrientations
+{
+//    NSLog(@"%s:%@", __func__, NSStringFromCGRect(self.navigationBar.frame));
+    
+    return UIInterfaceOrientationMaskAllButUpsideDown;
+}
+
+- (void)willRotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation duration:(NSTimeInterval)duration
+{
+//    NSLog(@"%s:%@", __func__, NSStringFromCGRect(self.navigationBar.frame));
+}
+
+- (void)didRotateFromInterfaceOrientation:(UIInterfaceOrientation)fromInterfaceOrientation
+{
+//    NSLog(@"%s:%@", __func__, NSStringFromCGRect(self.navigationBar.frame));
 }
 
 @end

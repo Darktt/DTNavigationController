@@ -51,7 +51,7 @@
 - (IBAction)puth:(id)sender
 {
     DTDetailViewController *tableViewController = [DTDetailViewController tableViewWithNibName:@"DTDetailViewController" bundle:nil];
-    [tableViewController setTitle:@"Detail View"];
+    [tableViewController setTitle:@"Detail 1"];
     
     [self.navigationController pushViewController:tableViewController animated:YES];
 }

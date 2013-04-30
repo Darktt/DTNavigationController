@@ -8,7 +8,7 @@
 
 #import "DTFolderItem.h"
 
-#define kBackgroundImage @""
+#define kBackgroundImage @"FolderItemBgImage.png"
 #define kBackgroundHighlightedImage @""
 
 #define kBackgroundImageViewTag 1
@@ -42,11 +42,11 @@
 
 - (id)initWithFolderName:(NSString *)folderName targer:(id)targer action:(SEL)action
 {
-    //folderName.length
     CGFloat fontSize = [UIFont systemFontSize];
-    CGFloat width = folderName.length * fontSize;
+    CGFloat width = folderName.length * fontSize - 10;
+    CGFloat height = UIInterfaceOrientationIsLandscape([[UIApplication sharedApplication] statusBarOrientation]) ? 32 : 44;
     
-    self = [super initWithFrame:CGRectMake(0, 0, width, 44)];
+    self = [super initWithFrame:CGRectMake(0, 0, width, height)];
     
     if (self == nil) return nil;
     [self setUserInteractionEnabled:YES];
@@ -66,9 +66,10 @@
 
 - (id)initWithImage:(UIImage *)iconImage targer:(id)targer action:(SEL)action
 {
-    CGFloat width = iconImage.size.width + 10;
+    CGFloat width = iconImage.size.width + 22;
+    CGFloat height = UIInterfaceOrientationIsLandscape([[UIApplication sharedApplication] statusBarOrientation]) ? 32 : 44;
     
-    self = [super initWithFrame:CGRectMake(0, 0, width, 44)];
+    self = [super initWithFrame:CGRectMake(0, 0, width, height)];
     
     if (self == nil) return nil;
     [self setUserInteractionEnabled:YES];
@@ -96,13 +97,15 @@
 
 - (void)setViewWithFolderName:(NSString *)folderName
 {
-    UIImage *bgImage = [UIImage imageNamed:kBackgroundImage];
-    UIImage *bgHighlightedImage = [UIImage imageNamed:kBackgroundHighlightedImage];
+    UIEdgeInsets edgeInsets = UIEdgeInsetsMake(22, 1, 22, 44);
+    UIImage *bgImage = [[UIImage imageNamed:kBackgroundImage] resizableImageWithCapInsets:edgeInsets];
+    UIImage *bgHighlightedImage = [[UIImage imageNamed:kBackgroundHighlightedImage] resizableImageWithCapInsets:edgeInsets];
     
     UIImageView *backgroundImageView = [[UIImageView alloc] initWithImage:bgImage highlightedImage:bgHighlightedImage];
-    [backgroundImageView sizeToFit];
-    [backgroundImageView setCenter:self.center];
+    [backgroundImageView setFrame:self.frame];
     [backgroundImageView setTag:kBackgroundImageViewTag];
+    [backgroundImageView setContentMode:UIViewContentModeScaleToFill];
+    [backgroundImageView setAutoresizingMask:UIViewAutoresizingFlexibleHeight];
     
     UILabel *titleLabel = [[UILabel alloc] initWithFrame:CGRectZero];
     [titleLabel setText:folderName];
@@ -110,6 +113,7 @@
     [titleLabel setCenter:self.center];
     [titleLabel setBackgroundColor:[UIColor clearColor]];
     [titleLabel setTag:kTitleLabelTag];
+    [titleLabel setAutoresizingMask:UIViewAutoresizingFlexibleTopMargin | UIViewAutoresizingFlexibleBottomMargin | UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleRightMargin];
     
     [self addSubview:backgroundImageView];
     [self addSubview:titleLabel];
@@ -122,26 +126,27 @@
 
 - (void)setViewWithImage:(UIImage *)iconImage
 {
-    UIImage *bgImage = [UIImage imageNamed:kBackgroundImage];
-    UIImage *bgHighlightedImage = [UIImage imageNamed:kBackgroundHighlightedImage];
+    UIEdgeInsets edgeInsets = UIEdgeInsetsMake(22, 1, 22, 44);
+    UIImage *bgImage = [[UIImage imageNamed:kBackgroundImage] resizableImageWithCapInsets:edgeInsets];
+    UIImage *bgHighlightedImage = [[UIImage imageNamed:kBackgroundHighlightedImage] resizableImageWithCapInsets:edgeInsets];
     
     UIImageView *backgroundImageView = [[UIImageView alloc] initWithImage:bgImage highlightedImage:bgHighlightedImage];
-    [backgroundImageView sizeToFit];
-    [backgroundImageView setCenter:self.center];
+    [backgroundImageView setFrame:self.frame];
     [backgroundImageView setTag:kBackgroundImageViewTag];
+    [backgroundImageView setContentMode:UIViewContentModeScaleToFill];
+    [backgroundImageView setAutoresizingMask:UIViewAutoresizingFlexibleHeight];
     
     UIImageView *iconImageView = [[UIImageView alloc] initWithImage:iconImage];
     [iconImageView sizeToFit];
-    [iconImageView setCenter:self.center];
+    [iconImageView setCenter:CGPointMake(self.center.x - 5, self.center.y)];
     [iconImageView setTag:kIconImageViewTag];
+    [iconImageView setAutoresizingMask:UIViewAutoresizingFlexibleTopMargin | UIViewAutoresizingFlexibleBottomMargin | UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleRightMargin];
     
     [self addSubview:backgroundImageView];
     [self addSubview:iconImageView];
     
     [backgroundImageView release];
     [iconImageView release];
-    
-    [self sizeToFit];
 }
 
 #pragma mark - Gesture recognizer method

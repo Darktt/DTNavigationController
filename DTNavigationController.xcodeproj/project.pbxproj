@@ -9,6 +9,11 @@
 /* Begin PBXBuildFile section */
 		554F7609172DFE740035A3B4 /* DTDetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 554F7607172DFE740035A3B4 /* DTDetailViewController.m */; };
 		554F760A172DFE740035A3B4 /* DTDetailViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 554F7608172DFE740035A3B4 /* DTDetailViewController.xib */; };
+		557EE8C0172E7630004E2695 /* FolderItemBgImage.png in Resources */ = {isa = PBXBuildFile; fileRef = 557EE8BE172E7630004E2695 /* FolderItemBgImage.png */; };
+		557EE8C1172E7630004E2695 /* FolderItemBgImage@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 557EE8BF172E7630004E2695 /* FolderItemBgImage@2x.png */; };
+		557EE8C3172E7D22004E2695 /* Home.png in Resources */ = {isa = PBXBuildFile; fileRef = 557EE8C2172E7D22004E2695 /* Home.png */; };
+		55810EE4172F732600BC94C3 /* NavigationBar.png in Resources */ = {isa = PBXBuildFile; fileRef = 55810EE2172F732600BC94C3 /* NavigationBar.png */; };
+		55810EE5172F732600BC94C3 /* NavigationBar@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 55810EE3172F732600BC94C3 /* NavigationBar@2x.png */; };
 		558868AE172A64D3008FA5A3 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 558868AD172A64D3008FA5A3 /* UIKit.framework */; };
 		558868B0172A64D3008FA5A3 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 558868AF172A64D3008FA5A3 /* Foundation.framework */; };
 		558868B2172A64D3008FA5A3 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 558868B1172A64D3008FA5A3 /* CoreGraphics.framework */; };
@@ -29,6 +34,11 @@
 		554F7606172DFE740035A3B4 /* DTDetailViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DTDetailViewController.h; sourceTree = "<group>"; };
 		554F7607172DFE740035A3B4 /* DTDetailViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DTDetailViewController.m; sourceTree = "<group>"; };
 		554F7608172DFE740035A3B4 /* DTDetailViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = DTDetailViewController.xib; sourceTree = "<group>"; };
+		557EE8BE172E7630004E2695 /* FolderItemBgImage.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = FolderItemBgImage.png; sourceTree = "<group>"; };
+		557EE8BF172E7630004E2695 /* FolderItemBgImage@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "FolderItemBgImage@2x.png"; sourceTree = "<group>"; };
+		557EE8C2172E7D22004E2695 /* Home.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Home.png; sourceTree = "<group>"; };
+		55810EE2172F732600BC94C3 /* NavigationBar.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = NavigationBar.png; sourceTree = "<group>"; };
+		55810EE3172F732600BC94C3 /* NavigationBar@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "NavigationBar@2x.png"; sourceTree = "<group>"; };
 		558868AA172A64D3008FA5A3 /* DTNavigationController.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = DTNavigationController.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		558868AD172A64D3008FA5A3 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		558868AF172A64D3008FA5A3 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
@@ -67,6 +77,18 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		557EE8BD172E7630004E2695 /* Images */ = {
+			isa = PBXGroup;
+			children = (
+				557EE8BE172E7630004E2695 /* FolderItemBgImage.png */,
+				557EE8BF172E7630004E2695 /* FolderItemBgImage@2x.png */,
+				557EE8C2172E7D22004E2695 /* Home.png */,
+				55810EE2172F732600BC94C3 /* NavigationBar.png */,
+				55810EE3172F732600BC94C3 /* NavigationBar@2x.png */,
+			);
+			path = Images;
+			sourceTree = "<group>";
+		};
 		558868A1172A64D3008FA5A3 = {
 			isa = PBXGroup;
 			children = (
@@ -106,6 +128,7 @@
 				554F7607172DFE740035A3B4 /* DTDetailViewController.m */,
 				554F7608172DFE740035A3B4 /* DTDetailViewController.xib */,
 				558868D6172A7B6A008FA5A3 /* DTNavigationController */,
+				557EE8BD172E7630004E2695 /* Images */,
 				558868B4172A64D3008FA5A3 /* Supporting Files */,
 			);
 			path = DTNavigationController;
@@ -196,6 +219,11 @@
 				558868C4172A64D4008FA5A3 /* Default-568h@2x.png in Resources */,
 				558868CA172A64D4008FA5A3 /* DTViewController.xib in Resources */,
 				554F760A172DFE740035A3B4 /* DTDetailViewController.xib in Resources */,
+				557EE8C0172E7630004E2695 /* FolderItemBgImage.png in Resources */,
+				557EE8C1172E7630004E2695 /* FolderItemBgImage@2x.png in Resources */,
+				557EE8C3172E7D22004E2695 /* Home.png in Resources */,
+				55810EE4172F732600BC94C3 /* NavigationBar.png in Resources */,
+				55810EE5172F732600BC94C3 /* NavigationBar@2x.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
