@@ -1,10 +1,19 @@
 //
 //  DTNavigationController.m
-//  DTNavigationController
 //
-//  Created by Darktt on 13/4/26.
-//  Copyright (c) 2013 Darktt. All rights reserved.
+// Copyright (c) 2013 Darktt
 //
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+//   http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
 
 #import "DTNavigationController.h"
 
@@ -43,7 +52,6 @@
     
     if (_folderBar == nil)
         _folderBar = [DTFolderBar folderBarWithFrame:self.navigationBar.frame];
-    [_folderBar setAutoresizingMask:self.navigationBar.autoresizingMask];
     
     [self.view addSubview:_folderBar];
 }
@@ -129,7 +137,7 @@
     if (animated) {
         void (^animations) (void) = ^{
             CGRect folderBarFrame = _folderBar.frame;
-            CGFloat width = _folderBar.frame.size.width; //self.navigationBar.frame.size.width;
+            CGFloat width = _folderBar.frame.size.width;
             
             if (folderBarHidden) {
                 folderBarFrame.origin.x -= width;
@@ -148,7 +156,7 @@
         [UIView animateWithDuration:UINavigationControllerHideShowBarDuration animations:animations completion:completion];
         return;
     }
-    
+   
     [self setFolderBarHidden:folderBarHidden];
 }
 
@@ -160,16 +168,16 @@
 - (void)rotateFolderBar
 {
     CGRect frame = _folderBar.frame;
-    BOOL orientation = !UIInterfaceOrientationIsPortrait([[UIApplication sharedApplication] statusBarOrientation]);
+    BOOL isPortraitOrientation = UIInterfaceOrientationIsPortrait([[UIApplication sharedApplication] statusBarOrientation]);
     UIScreen *screen = [UIScreen mainScreen];
-    CGFloat width = orientation ? screen.bounds.size.height : screen.bounds.size.width;
-    CGFloat hight = orientation ? 44.0f : 32.0f;
+    CGFloat width = isPortraitOrientation ? screen.bounds.size.height : screen.bounds.size.width;
+    CGFloat height = isPortraitOrientation ? 32.0f : 44.0f;
     
     if (_folderBar.hidden) {
-        frame.origin.x = -self.navigationBar.frame.size.width;
-        frame.size = CGSizeMake(width, hight);
+        frame.origin.x = -width;
+        frame.size = CGSizeMake(width, height);
     } else {
-        frame = CGRectMake(0, 20, width, hight);
+        frame.size = CGSizeMake(width, height);
     }
     
     [_folderBar setFrame:frame];
@@ -210,7 +218,31 @@
 
 - (void)willRotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation duration:(NSTimeInterval)duration
 {
-    [self rotateFolderBar];
+    void (^animations)(void) = ^{
+        [self rotateFolderBar];
+    };
+    
+    [UIView animateWithDuration:duration
+                          delay:0.0f
+                        options:UIViewAnimationOptionCurveEaseOut
+                     animations:animations
+                     completion:nil];
+}
+
+- (void)setImage:(UIImage *)image
+{
+    UIImageView *imageView = [[UIImageView alloc] initWithImage:image];
+    [imageView setFrame:self.view.bounds];
+    
+    [self.view addSubview:imageView];
+    [imageView release];
+}
+
+- (UIImage *)image
+{
+    UIImageView *imageView = (UIImageView *)[self.view viewWithTag:1];
+    
+    return imageView.image;
 }
 
 @end
