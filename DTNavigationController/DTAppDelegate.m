@@ -25,7 +25,6 @@
     self.window = [[[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]] autorelease];
     // Override point for customization after application launch.
     self.viewController = [[[DTViewController alloc] initWithNibName:@"DTViewController" bundle:nil] autorelease];
-    [self.viewController setTitle:@"Root"];
     
     DTNavigationController *nav = [DTNavigationController navigationWithRootViewController:self.viewController];
     [nav.folderBar setBackgroundColor:[UIColor lightGrayColor]];

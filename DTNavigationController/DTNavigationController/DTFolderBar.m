@@ -18,16 +18,16 @@
 #import "DTFolderBar.h"
 
 #define kBackgroundViewTag 2
-#define kScrolViewTag 3
+#define kScrollViewTag 3
 
 typedef void (^DTAnimationsBlock) (void);
 typedef void (^DTCompletionBlock) (BOOL finshed);
 
-@interface DTFolderBar () <UIScrollViewDelegate>
+@interface DTFolderBar ()
 {
+    DTFolderBarStyle _style;
     NSMutableArray *_folderItems; // Saved folderItem array
     CGFloat nextItemPosition;
-    void (^animate) (void);
 }
 
 @end
@@ -41,7 +41,19 @@ typedef void (^DTCompletionBlock) (BOOL finshed);
     return folderBar;
 }
 
++ (id)folderBarWithFrame:(CGRect)frame style:(DTFolderBarStyle)style
+{
+    DTFolderBar *folderBar = [[[DTFolderBar alloc] initWithFrame:frame] autorelease];
+    
+    return folderBar;
+}
+
 - (id)initWithFrame:(CGRect)frame
+{
+    return [self initWithFrame:frame style:DTFolderBarStyleNormal];
+}
+
+- (id)initWithFrame:(CGRect)frame style:(DTFolderBarStyle)style
 {
     self = [super initWithFrame:frame];
     if (self == nil) return nil;
@@ -49,6 +61,7 @@ typedef void (^DTCompletionBlock) (BOOL finshed);
     [self setClipsToBounds:YES];
     [self setBackgroundColor:[UIColor whiteColor]];
     
+    _style = style;
     _folderItems = [NSMutableArray new];
     
     UIImageView *backgroundView = [[UIImageView alloc] initWithFrame:self.bounds];
@@ -57,13 +70,11 @@ typedef void (^DTCompletionBlock) (BOOL finshed);
     [backgroundView setAutoresizingMask:UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight];
     
     UIScrollView *scrollView = [[UIScrollView alloc] initWithFrame:self.bounds];
-    [scrollView setTag:kScrolViewTag];
+    [scrollView setTag:kScrollViewTag];
     [scrollView setShowsHorizontalScrollIndicator:NO];
     [scrollView setShowsVerticalScrollIndicator:NO];
     [scrollView setContentOffset:CGPointMake(0, 0)];
     [scrollView setAutoresizingMask:UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight];
-    
-    [scrollView setDelegate:self];
     
     [self addSubview:backgroundView];
     [self addSubview:scrollView];
@@ -77,7 +88,6 @@ typedef void (^DTCompletionBlock) (BOOL finshed);
 - (void)dealloc
 {
     [_folderItems release];
-    
     [super dealloc];
 }
 
@@ -120,7 +130,7 @@ typedef void (^DTCompletionBlock) (BOOL finshed);
 
 - (void)removeFolderItemsFromSuperview
 {
-    UIScrollView *scrolView = (UIScrollView *)[self viewWithTag:kScrolViewTag];
+    UIScrollView *scrolView = (UIScrollView *)[self viewWithTag:kScrollViewTag];
     
     for (DTFolderItem *folderItem in scrolView.subviews) {
         if ([folderItem isKindOfClass:[DTFolderItem class]]) {
@@ -142,15 +152,15 @@ typedef void (^DTCompletionBlock) (BOOL finshed);
     
     [folderItem setFrame:folderItemFrame];
     
-    UIScrollView *scrollView = (UIScrollView *)[self viewWithTag:kScrolViewTag];
-    [scrollView setContentSize:CGSizeMake((nextItemPosition + folderItemFrame.size.width + 44), 0)];
+    CGFloat contenSizeWidth = nextItemPosition + folderItemFrame.size.width;
+    
+    UIScrollView *scrollView = (UIScrollView *)[self viewWithTag:kScrollViewTag];
+    [scrollView setContentSize:CGSizeMake((contenSizeWidth + 44), 0)];
     [scrollView insertSubview:folderItem atIndex:0];
     
-    CGFloat offsetX = nextItemPosition + folderItemFrame.size.width;
-    
-    if (offsetX > scrollView.frame.size.width) {
+    if (contenSizeWidth > scrollView.frame.size.width) {
         CGPoint offset = scrollView.contentOffset;
-        offset.x = offsetX - scrollView.frame.size.width;
+        offset.x = contenSizeWidth - scrollView.frame.size.width + 44;
         
         [scrollView setContentOffset:offset animated:scrollAnimated];
     }
@@ -168,6 +178,7 @@ typedef void (^DTCompletionBlock) (BOOL finshed);
 
 - (void)deleteFolderItem:(DTFolderItem *)folderItem animated:(BOOL)animated
 {
+    /*
     [folderItem setAutoresizesSubviews:YES];
     
     CGRect frame = folderItem.frame;
@@ -189,9 +200,11 @@ typedef void (^DTCompletionBlock) (BOOL finshed);
     };
     
     [UIView animateWithDuration:0.3f animations:animations completion:completion];
+     */
 }
 
 #pragma mark - Overwrite methods
+#pragma mark Background image methods
 
 - (void)setBackgroundImage:(UIImage *)backgroundImage
 {

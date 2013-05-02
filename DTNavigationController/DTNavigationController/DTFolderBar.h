@@ -18,12 +18,19 @@
 #import <UIKit/UIKit.h>
 #import "DTFolderItem.h"
 
+enum {
+    DTFolderBarStyleNormal = 0,
+    DTFolderBarStyleFixedLeftItemStyle,
+};
+typedef NSInteger DTFolderBarStyle;
+
 @interface DTFolderBar : UIView
 
 @property (nonatomic, retain) NSArray *folderItems;
-@property (nonatomic, retain) UIImage *backgroundImage;
+@property (nonatomic, retain) UIImage *backgroundImage; // Defaul is nil
 
 + (id)folderBarWithFrame:(CGRect)frame;
++ (id)folderBarWithFrame:(CGRect)frame style:(DTFolderBarStyle)style;
 
 - (void)setFolderItems:(NSArray *)folderItems animated:(BOOL)animated;
 - (void)deleteFolderItem:(DTFolderItem *)folderItem animated:(BOOL)animated;

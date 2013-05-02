@@ -83,6 +83,7 @@
     
     if (indexPath.row == 1) {
         [cell.textLabel setText:@"Push to next folder with hide folder bar"];
+        [cell.textLabel setLineBreakMode:NSLineBreakByTruncatingHead];
     }
     
     if (indexPath.row == 2) {
@@ -108,7 +109,7 @@
     
     if (indexPath.row == 1) {
         DTViewController *viewController = [[DTViewController alloc] initWithNibName:@"DTViewController" bundle:nil];
-        [viewController setTitle:@"Detail 2"];
+        [viewController setTitle:@"Detail 3"];
         
         DTNavigationController *nav = (DTNavigationController *)self.navigationController;
         [nav setFolderBarHidden:YES animated:YES];

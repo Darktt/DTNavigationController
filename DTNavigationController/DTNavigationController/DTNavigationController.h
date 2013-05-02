@@ -25,8 +25,6 @@
 @property (nonatomic, getter = isFolderBarHidden) BOOL folderBarHidden;
 @property (nonatomic, readonly) DTFolderBar *folderBar;
 
-@property (nonatomic, retain) UIImage *image;
-
 + (instancetype)navigationWithRootViewController:(UIViewController *)rootViewController;
 
 - (void)setFolderBarHidden:(BOOL)folderBarHidden animated:(BOOL)animated;

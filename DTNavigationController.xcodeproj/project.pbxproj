@@ -151,12 +151,12 @@
 		558868D6172A7B6A008FA5A3 /* DTNavigationController */ = {
 			isa = PBXGroup;
 			children = (
-				558868D0172A6509008FA5A3 /* DTNavigationController.h */,
-				558868D1172A6509008FA5A3 /* DTNavigationController.m */,
 				558868D3172A7B55008FA5A3 /* DTFolderBar.h */,
 				558868D4172A7B55008FA5A3 /* DTFolderBar.m */,
 				55AC45FB172E0E600091D701 /* DTFolderItem.h */,
 				55AC45FC172E0E600091D701 /* DTFolderItem.m */,
+				558868D0172A6509008FA5A3 /* DTNavigationController.h */,
+				558868D1172A6509008FA5A3 /* DTNavigationController.m */,
 			);
 			path = DTNavigationController;
 			sourceTree = "<group>";

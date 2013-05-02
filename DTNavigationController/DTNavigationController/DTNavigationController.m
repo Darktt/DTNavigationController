@@ -17,6 +17,8 @@
 
 #import "DTNavigationController.h"
 
+#define kFolderItemIcon @"Home.png"
+
 @interface DTNavigationController ()
 {
     DTFolderBar *_folderBar;
@@ -81,8 +83,8 @@
     NSMutableArray *folderItems = [NSMutableArray arrayWithArray:_folderBar.folderItems];
     DTFolderItem *folderItem = nil;
     
-    if ([viewController.title isEqualToString:@"Root"]) {
-        folderItem = [DTFolderItem itemWithImage:[UIImage imageNamed:@"Home.png"] targer:self action:@selector(tapFolderItem:)];
+    if (viewController.title == nil) {
+        folderItem = [DTFolderItem itemWithImage:[UIImage imageNamed:kFolderItemIcon] targer:self action:@selector(tapFolderItem:)];
     } else {
         folderItem = [DTFolderItem itemWithFolderName:viewController.title targer:self action:@selector(tapFolderItem:)];
     }
