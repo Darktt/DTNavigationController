@@ -95,7 +95,7 @@
     
     [folderItems addObject:folderItem];
     
-    [_folderBar setFolderItems:folderItems animated:YES];
+    [_folderBar setFolderItems:folderItems animated:NO]; //YES];
 }
 
 - (UIViewController *)popViewControllerAnimated:(BOOL)animated
