@@ -23,6 +23,7 @@
 
 // Animation Duration
 #define kAddFolderDuration 0.2f
+#define kDeleteFolderDuration 0.2f
 
 typedef void (^DTAnimationsBlock) (void);
 typedef void (^DTCompletionBlock) (BOOL finshed);
@@ -112,26 +113,27 @@ typedef void (^DTCompletionBlock) (BOOL finshed);
 
 - (void)setFolderItems:(NSArray *)folderItems animated:(BOOL)animated
 {
-    BOOL isAdd = NO;
-    
     if (folderItems.count > _folderItems.count) {
-        NSLog(@"Add");
-        isAdd = YES;
+        [self removeFolderItemsFromSuperview];
+        
+        [_folderItems removeAllObjects];
+        [_folderItems addObjectsFromArray:folderItems];
+        
+        nextItemPosition = 0.0f;
+        
+        for (DTFolderItem *folderItem in _folderItems) {
+            [self addFolderItem:folderItem animated:animated];
+            nextItemPosition += (folderItem.frame.size.width - 22);
+        }
     } else {
-        NSLog(@"Delete");
-        isAdd = NO;
-    }
-    
-    [self removeFolderItemsFromSuperview];
-    
-    [_folderItems removeAllObjects];
-    [_folderItems addObjectsFromArray:folderItems];
-    
-    nextItemPosition = 0.0f;
-    
-    for (DTFolderItem *folderItem in _folderItems) {
-        [self addFolderItem:folderItem animated:animated];
-        nextItemPosition += (folderItem.frame.size.width - 22);
+        NSMutableArray *removedItems = [NSMutableArray arrayWithArray:_folderItems];
+        [removedItems removeObjectsInArray:folderItems];
+        [removedItems enumerateObjectsWithOptions:NSEnumerationReverse usingBlock:^(DTFolderItem *folderItem, NSUInteger idx, BOOL *stop){
+            [self deleteFolderItem:folderItem animated:YES];
+        }];
+        
+        [_folderItems removeAllObjects];
+        [_folderItems addObjectsFromArray:folderItems];
     }
 }
 
@@ -154,11 +156,11 @@ typedef void (^DTCompletionBlock) (BOOL finshed);
 
 - (void)addFolderItem:(DTFolderItem *)folderItem animated:(BOOL)animated
 {
-    UIView *folderItemView = (UIView *)[self viewWithTag:kFolderItemViewTag];
-    CGRect folderItemViewFrame = folderItemView.frame;
-    
     BOOL scrollAnimated = animated;
     NSTimeInterval duration = animated ? kAddFolderDuration : 0.0f;
+    
+    UIView *folderItemView = (UIView *)[self viewWithTag:kFolderItemViewTag];
+    CGRect folderItemViewFrame = folderItemView.frame;
     
     if (folderItem != [_folderItems lastObject]) {
         scrollAnimated = NO;
@@ -192,29 +194,27 @@ typedef void (^DTCompletionBlock) (BOOL finshed);
 
 - (void)deleteFolderItem:(DTFolderItem *)folderItem animated:(BOOL)animated
 {
-    /*
-    [folderItem setAutoresizesSubviews:YES];
+    NSTimeInterval duration = animated ? kDeleteFolderDuration : 0.0f;
     
-    CGRect frame = folderItem.frame;
-    frame.size.width = 0.0f;
+    UIView *folderItemView = (UIView *)[self viewWithTag:kFolderItemViewTag];
+    CGRect folderItemViewFrame = folderItemView.frame;
+    folderItemViewFrame.size.width -= ( folderItem.frame.size.width - 22 );
     
-    [_folderItems removeObject:folderItem];
+    UIScrollView *scrollView = (UIScrollView *)[self viewWithTag:kScrollViewTag];
     
-    if (!animated) {
-        [folderItem removeFromSuperview];
-        return;
-    }
+    CGSize contenSize = scrollView.contentSize;
+    contenSize.width = folderItemViewFrame.size.width + 44;
     
     DTAnimationsBlock animations = ^{
-        [folderItem setFrame:frame];
+        [folderItemView setFrame:folderItemViewFrame];
+        [scrollView setContentSize:contenSize];
     };
     
-    DTCompletionBlock completion = ^(BOOL finished){
+    DTCompletionBlock completion = ^(BOOL finsh){
         [folderItem removeFromSuperview];
     };
     
-    [UIView animateWithDuration:0.3f animations:animations completion:completion];
-     */
+    [UIView animateWithDuration:duration animations:animations completion:completion];
 }
 
 #pragma mark - Overwrite methods

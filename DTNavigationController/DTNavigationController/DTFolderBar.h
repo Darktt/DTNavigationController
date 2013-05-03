@@ -33,6 +33,5 @@ typedef NSInteger DTFolderBarStyle;
 + (id)folderBarWithFrame:(CGRect)frame style:(DTFolderBarStyle)style;
 
 - (void)setFolderItems:(NSArray *)folderItems animated:(BOOL)animated;
-- (void)deleteFolderItem:(DTFolderItem *)folderItem animated:(BOOL)animated;
 
 @end
