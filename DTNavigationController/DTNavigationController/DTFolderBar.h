@@ -16,7 +16,6 @@
 // limitations under the License.
 
 #import <UIKit/UIKit.h>
-#import "DTFolderItem.h"
 
 enum {
     DTFolderBarStyleNormal = 0,

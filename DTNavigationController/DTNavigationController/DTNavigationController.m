@@ -31,6 +31,8 @@ typedef void (^DTCompletionBlock) (BOOL finshed);
 
 @implementation DTNavigationController
 
+#pragma mark - Initialize Class
+
 + (instancetype)navigationWithRootViewController:(UIViewController *)rootViewController
 {
     DTNavigationController *nav = [[[DTNavigationController alloc] initWithRootViewController:rootViewController] autorelease];
@@ -190,6 +192,8 @@ typedef void (^DTCompletionBlock) (BOOL finshed);
 
 - (IBAction)tapFolderItem:(DTFolderItem *)sender
 {
+    [sender setHightlighted:YES];
+    
     NSMutableArray *folderItems = [NSMutableArray arrayWithArray:_folderBar.folderItems];
     
     if (sender == folderItems.lastObject) {
@@ -222,7 +226,7 @@ typedef void (^DTCompletionBlock) (BOOL finshed);
 
 - (void)willRotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation duration:(NSTimeInterval)duration
 {
-    void (^animations)(void) = ^{
+    DTAnimationsBlock animations = ^{
         [self rotateFolderBar];
     };
     

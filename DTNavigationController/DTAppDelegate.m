@@ -28,7 +28,6 @@
     
     DTNavigationController *nav = [DTNavigationController navigationWithRootViewController:self.viewController];
     [nav.folderBar setBackgroundColor:[UIColor lightGrayColor]];
-//    [nav.folderBar setBackgroundImage:[UIImage imageNamed:@"NavigationBar.png"]];
     
     self.window.rootViewController = nav;
     [self.window makeKeyAndVisible];

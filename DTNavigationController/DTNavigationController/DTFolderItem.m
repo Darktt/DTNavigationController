@@ -18,7 +18,7 @@
 #import "DTFolderItem.h"
 
 // Background image
-#define kBackgroundImage @"FolderItemBgImage.png"
+#define kBackgroundImage            @"FolderItemBgImage.png"
 #define kBackgroundHighlightedImage @""
 
 // View tag
@@ -33,12 +33,13 @@
 {
     id      _targer;
     SEL     _action;
-    CGRect  _frame;
 }
 
 @end
 
 @implementation DTFolderItem
+
+#pragma mark - Initialize Class
 
 + (id)itemWithFolderName:(NSString *)folderName targer:(id)targer action:(SEL)action
 {
@@ -57,10 +58,10 @@
 - (id)initWithFolderName:(NSString *)folderName targer:(id)targer action:(SEL)action
 {
     CGFloat fontSize = [UIFont systemFontSize];
-    CGFloat width = folderName.length * fontSize - 10;
-    CGFloat height = UIInterfaceOrientationIsLandscape([[UIApplication sharedApplication] statusBarOrientation]) ? 32 : 44;
+    CGFloat width = folderName.length * fontSize - 10.0f;
+    CGFloat height = UIInterfaceOrientationIsLandscape([[UIApplication sharedApplication] statusBarOrientation]) ? 32.0f : 44.0f;
     
-    self = [super initWithFrame:CGRectMake(0, 0, width, height)];
+    self = [super initWithFrame:CGRectMake(0.0f, 0.0f, width, height)];
     
     if (self == nil) return nil;
     [self setUserInteractionEnabled:YES];
@@ -80,10 +81,10 @@
 
 - (id)initWithImage:(UIImage *)iconImage targer:(id)targer action:(SEL)action
 {
-    CGFloat width = iconImage.size.width + 22;
-    CGFloat height = UIInterfaceOrientationIsLandscape([[UIApplication sharedApplication] statusBarOrientation]) ? 32 : 44;
+    CGFloat width = iconImage.size.width + 22.0f;
+    CGFloat height = UIInterfaceOrientationIsLandscape([[UIApplication sharedApplication] statusBarOrientation]) ? 32.0f : 44.0f;
     
-    self = [super initWithFrame:CGRectMake(0, 0, width, height)];
+    self = [super initWithFrame:CGRectMake(0.0f, 0.0f, width, height)];
     
     if (self == nil) return nil;
     [self setUserInteractionEnabled:YES];
@@ -111,7 +112,7 @@
 
 - (void)setViewWithFolderName:(NSString *)folderName
 {
-    UIEdgeInsets edgeInsets = UIEdgeInsetsMake(22, 1, 22, 44);
+    UIEdgeInsets edgeInsets = UIEdgeInsetsMake(22.0f, 1.0f, 22.0f, 44.0f);
     UIImage *bgImage = [[UIImage imageNamed:kBackgroundImage] resizableImageWithCapInsets:edgeInsets];
     UIImage *bgHighlightedImage = [[UIImage imageNamed:kBackgroundHighlightedImage] resizableImageWithCapInsets:edgeInsets];
     
@@ -150,7 +151,7 @@
 
 - (void)setViewWithImage:(UIImage *)iconImage
 {
-    UIEdgeInsets edgeInsets = UIEdgeInsetsMake(22, 1, 22, 44);
+    UIEdgeInsets edgeInsets = UIEdgeInsetsMake(22.0f, 1.0f, 22.0f, 44.0f);
     UIImage *bgImage = [[UIImage imageNamed:kBackgroundImage] resizableImageWithCapInsets:edgeInsets];
     UIImage *bgHighlightedImage = [[UIImage imageNamed:kBackgroundHighlightedImage] resizableImageWithCapInsets:edgeInsets];
     
@@ -173,7 +174,7 @@
     [iconImageView release];
 }
 
-#pragma mark - Gesture recognizer method
+#pragma mark - Gesture Recognizer Method
 
 - (IBAction)tapItem:(UITapGestureRecognizer *)sender
 {
@@ -236,7 +237,7 @@
     return backgroundImageView.highlightedImage;
 }
 
-#pragma mark #BackgroundImage and highlightedImage
+#pragma mark #BackgroundImage And HighlightedImage
 
 - (void)setBackgroundImage:(UIImage *)backgroundImage highlightedImage:(UIImage *)highlightedImage
 {

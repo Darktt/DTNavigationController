@@ -17,8 +17,7 @@
 
 #import <UIKit/UIKit.h>
 #import "DTFolderBar.h"
-
-@class DTFolderBar;
+#import "DTFolderItem.h"
 
 @interface DTNavigationController : UINavigationController
 

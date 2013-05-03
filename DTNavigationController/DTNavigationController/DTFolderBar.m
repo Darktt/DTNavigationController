@@ -16,6 +16,7 @@
 // limitations under the License.
 
 #import "DTFolderBar.h"
+#import "DTFolderItem.h"
 
 // View Tag
 #define kBackgroundViewTag 2
@@ -38,6 +39,8 @@ typedef void (^DTCompletionBlock) (BOOL finshed);
 @end
 
 @implementation DTFolderBar
+
+#pragma mark - Initialize Class
 
 + (id)folderBarWithFrame:(CGRect)frame
 {
@@ -69,17 +72,19 @@ typedef void (^DTCompletionBlock) (BOOL finshed);
     _style = style;
     _folderItems = [NSMutableArray new];
     
+    UIViewAutoresizing autoresizing = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
+    
     UIImageView *backgroundView = [[UIImageView alloc] initWithFrame:self.bounds];
     [backgroundView setTag:kBackgroundViewTag];
     [backgroundView setContentMode:UIViewContentModeScaleToFill];
-    [backgroundView setAutoresizingMask:UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight];
+    [backgroundView setAutoresizingMask:autoresizing];
     
     UIScrollView *scrollView = [[UIScrollView alloc] initWithFrame:self.bounds];
     [scrollView setTag:kScrollViewTag];
     [scrollView setShowsHorizontalScrollIndicator:NO];
     [scrollView setShowsVerticalScrollIndicator:NO];
     [scrollView setContentOffset:CGPointMake(0, 0)];
-    [scrollView setAutoresizingMask:UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight];
+    [scrollView setAutoresizingMask:autoresizing];
     
     CGRect folderItemViewFrame = self.bounds;
     folderItemViewFrame.size.width = 0;
@@ -88,6 +93,7 @@ typedef void (^DTCompletionBlock) (BOOL finshed);
     [folderItemView setBackgroundColor:[UIColor clearColor]];
     [folderItemView setClipsToBounds:YES];
     [folderItemView setTag:kFolderItemViewTag];
+    [folderItemView setAutoresizingMask:UIViewAutoresizingFlexibleHeight];
     
     [self addSubview:backgroundView];
     [self addSubview:scrollView];
