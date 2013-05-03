@@ -178,29 +178,7 @@ typedef void (^DTCompletionBlock) (BOOL finshed);
 
 - (void)deleteFolderItem:(DTFolderItem *)folderItem animated:(BOOL)animated
 {
-    /*
-    [folderItem setAutoresizesSubviews:YES];
     
-    CGRect frame = folderItem.frame;
-    frame.size.width = 0.0f;
-    
-    [_folderItems removeObject:folderItem];
-    
-    if (!animated) {
-        [folderItem removeFromSuperview];
-        return;
-    }
-    
-    DTAnimationsBlock animations = ^{
-        [folderItem setFrame:frame];
-    };
-    
-    DTCompletionBlock completion = ^(BOOL finished){
-        [folderItem removeFromSuperview];
-    };
-    
-    [UIView animateWithDuration:0.3f animations:animations completion:completion];
-     */
 }
 
 #pragma mark - Overwrite methods
