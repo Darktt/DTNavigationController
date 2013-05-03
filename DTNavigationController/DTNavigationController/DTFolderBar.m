@@ -17,6 +17,7 @@
 
 #import "DTFolderBar.h"
 
+// View Tag
 #define kBackgroundViewTag 2
 #define kScrollViewTag 3
 #define kFolderItemViewTag 4
@@ -32,7 +33,6 @@ typedef void (^DTCompletionBlock) (BOOL finshed);
 {
     DTFolderBarStyle _style;
     NSMutableArray *_folderItems; // Saved folderItem array
-    CGFloat nextItemPosition;
 }
 
 @end
@@ -81,7 +81,10 @@ typedef void (^DTCompletionBlock) (BOOL finshed);
     [scrollView setContentOffset:CGPointMake(0, 0)];
     [scrollView setAutoresizingMask:UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight];
     
-    UIView *folderItemView = [[UIView alloc] initWithFrame:self.bounds];
+    CGRect folderItemViewFrame = self.bounds;
+    folderItemViewFrame.size.width = 0;
+    
+    UIView *folderItemView = [[UIView alloc] initWithFrame:folderItemViewFrame];
     [folderItemView setBackgroundColor:[UIColor clearColor]];
     [folderItemView setClipsToBounds:YES];
     [folderItemView setTag:kFolderItemViewTag];
@@ -104,7 +107,7 @@ typedef void (^DTCompletionBlock) (BOOL finshed);
     [super dealloc];
 }
 
-#pragma mark - Add folder item methods
+#pragma mark - Add Folder Item Methods
 
 - (void)setFolderItems:(NSArray *)folderItems
 {
@@ -114,17 +117,11 @@ typedef void (^DTCompletionBlock) (BOOL finshed);
 - (void)setFolderItems:(NSArray *)folderItems animated:(BOOL)animated
 {
     if (folderItems.count > _folderItems.count) {
-        [self removeFolderItemsFromSuperview];
-        
         [_folderItems removeAllObjects];
         [_folderItems addObjectsFromArray:folderItems];
         
-        nextItemPosition = 0.0f;
-        
-        for (DTFolderItem *folderItem in _folderItems) {
-            [self addFolderItem:folderItem animated:animated];
-            nextItemPosition += (folderItem.frame.size.width - 22);
-        }
+        DTFolderItem *folderItem = _folderItems.lastObject;
+        [self addFolderItem:folderItem animated:YES];
     } else {
         NSMutableArray *removedItems = [NSMutableArray arrayWithArray:_folderItems];
         [removedItems removeObjectsInArray:folderItems];
@@ -142,28 +139,18 @@ typedef void (^DTCompletionBlock) (BOOL finshed);
     return _folderItems;
 }
 
-- (void)removeFolderItemsFromSuperview
-{
-//    UIScrollView *scrolView = (UIScrollView *)[self viewWithTag:kScrollViewTag];
-    UIView *folderItemView = (UIView *)[self viewWithTag:kFolderItemViewTag];
-    
-    for (DTFolderItem *folderItem in folderItemView.subviews) {
-        if ([folderItem isKindOfClass:[DTFolderItem class]]) {
-            [folderItem removeFromSuperview];
-        }
-    }
-}
-
 - (void)addFolderItem:(DTFolderItem *)folderItem animated:(BOOL)animated
 {
-    BOOL scrollAnimated = animated;
     NSTimeInterval duration = animated ? kAddFolderDuration : 0.0f;
     
     UIView *folderItemView = (UIView *)[self viewWithTag:kFolderItemViewTag];
     CGRect folderItemViewFrame = folderItemView.frame;
     
-    if (folderItem != [_folderItems lastObject]) {
-        scrollAnimated = NO;
+    CGFloat nextItemPosition = folderItemViewFrame.size.width - 22.0f;
+    folderItemViewFrame.size.width += folderItem.frame.size.width;
+    
+    if (nextItemPosition < 0.0f) {
+        nextItemPosition = 0.0f;
     }
     
     CGRect folderItemFrame = folderItem.frame;
@@ -182,13 +169,13 @@ typedef void (^DTCompletionBlock) (BOOL finshed);
     [UIView animateWithDuration:duration animations:animations];
     
     UIScrollView *scrollView = (UIScrollView *)[self viewWithTag:kScrollViewTag];
-    [scrollView setContentSize:CGSizeMake((folderItemViewWidth + 44), 0)];
+    [scrollView setContentSize:CGSizeMake((folderItemViewWidth + 44.0f), 0)];
     
     if (folderItemViewWidth > scrollView.frame.size.width) {
         CGPoint offset = scrollView.contentOffset;
-        offset.x = folderItemViewWidth - scrollView.frame.size.width + 44;
+        offset.x = folderItemViewWidth - scrollView.frame.size.width + 44.0f;
         
-        [scrollView setContentOffset:offset animated:scrollAnimated];
+        [scrollView setContentOffset:offset animated:YES];
     }
 }
 
@@ -198,12 +185,12 @@ typedef void (^DTCompletionBlock) (BOOL finshed);
     
     UIView *folderItemView = (UIView *)[self viewWithTag:kFolderItemViewTag];
     CGRect folderItemViewFrame = folderItemView.frame;
-    folderItemViewFrame.size.width -= ( folderItem.frame.size.width - 22 );
+    folderItemViewFrame.size.width -= ( folderItem.frame.size.width - 22.0f );
     
     UIScrollView *scrollView = (UIScrollView *)[self viewWithTag:kScrollViewTag];
     
     CGSize contenSize = scrollView.contentSize;
-    contenSize.width = folderItemViewFrame.size.width + 44;
+    contenSize.width = folderItemViewFrame.size.width + 44.0f;
     
     DTAnimationsBlock animations = ^{
         [folderItemView setFrame:folderItemViewFrame];
@@ -217,8 +204,8 @@ typedef void (^DTCompletionBlock) (BOOL finshed);
     [UIView animateWithDuration:duration animations:animations completion:completion];
 }
 
-#pragma mark - Overwrite methods
-#pragma mark Background image methods
+#pragma mark - Overwrite Methods
+#pragma mark #Background Image
 
 - (void)setBackgroundImage:(UIImage *)backgroundImage
 {

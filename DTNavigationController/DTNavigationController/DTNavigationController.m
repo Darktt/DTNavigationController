@@ -19,6 +19,9 @@
 
 #define kFolderItemIcon @"Home.png"
 
+typedef void (^DTAnimationsBlock) (void);
+typedef void (^DTCompletionBlock) (BOOL finshed);
+
 @interface DTNavigationController ()
 {
     DTFolderBar *_folderBar;
@@ -100,8 +103,6 @@
 
 - (UIViewController *)popViewControllerAnimated:(BOOL)animated
 {
-//    [self setFolderBarHidden:NO animated:YES];
-    
     NSMutableArray *folderItems = [NSMutableArray arrayWithArray:self.folderBar.folderItems];
     [folderItems removeLastObject];
     
@@ -137,7 +138,7 @@
 - (void)setFolderBarHidden:(BOOL)folderBarHidden animated:(BOOL)animated
 {
     if (animated) {
-        void (^animations) (void) = ^{
+         DTAnimationsBlock animations = ^{
             CGRect folderBarFrame = _folderBar.frame;
             CGFloat width = _folderBar.frame.size.width;
             
@@ -151,7 +152,7 @@
             [_folderBar setFrame:folderBarFrame];
         };
         
-        void (^completion) (BOOL finished) = ^(BOOL finished){
+        DTCompletionBlock completion = ^(BOOL finished){
             if(folderBarHidden)[self setFolderBarHidden:folderBarHidden];
         };
         
@@ -212,7 +213,7 @@
     [self popToViewController:viewComtroller animated:YES];
 }
 
-#pragma mark - Rotation view method
+#pragma mark - Rotation View Method
 
 - (UIView *)rotatingHeaderView
 {

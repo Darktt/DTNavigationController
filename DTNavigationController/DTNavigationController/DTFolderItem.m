@@ -102,7 +102,7 @@
     [super dealloc];
 }
 
-#pragma mark - Set subvies
+#pragma mark - Set Subvies
 
 - (void)setViewWithFolderName:(NSString *)folderName
 {
@@ -165,7 +165,7 @@
     [[UIApplication sharedApplication] sendAction:_action to:_targer from:self forEvent:nil];
 }
 
-#pragma mark - Overwrite methods
+#pragma mark - Overwrite Methods
 #pragma mark #Hightlighted
 
 - (void)setHightlighted:(BOOL)hightlighted
