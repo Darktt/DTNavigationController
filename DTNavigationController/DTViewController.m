@@ -41,11 +41,12 @@
     }
 }
 
-- (void)viewDidAppear:(BOOL)animated
+-(void)viewWillDisappear:(BOOL)animated
 {
-    [super viewDidAppear:animated];
-    
-    
+    if ([self.title isEqualToString:@"Detail 3"]) {
+        DTNavigationController *nav = (DTNavigationController *)self.navigationController;
+        [nav setFolderBarHidden:NO animated:YES];
+    }
 }
 
 - (IBAction)puth:(id)sender

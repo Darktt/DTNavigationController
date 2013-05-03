@@ -33,9 +33,6 @@
     
     [self setRefreshControl:refresh];
     [refresh release];
-    
-//    DTNavigationController *nav = (DTNavigationController *)self.navigationController;
-//    [nav setFolderBarHidden:YES animated:YES];
 }
 
 - (void)didReceiveMemoryWarning

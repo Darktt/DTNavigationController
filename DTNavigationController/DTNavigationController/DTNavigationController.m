@@ -100,7 +100,7 @@
 
 - (UIViewController *)popViewControllerAnimated:(BOOL)animated
 {
-    [self setFolderBarHidden:NO animated:YES];
+//    [self setFolderBarHidden:NO animated:YES];
     
     NSMutableArray *folderItems = [NSMutableArray arrayWithArray:self.folderBar.folderItems];
     [folderItems removeLastObject];
@@ -190,13 +190,14 @@
 - (IBAction)tapFolderItem:(DTFolderItem *)sender
 {
     NSMutableArray *folderItems = [NSMutableArray arrayWithArray:_folderBar.folderItems];
-    NSUInteger index = [folderItems indexOfObject:sender];
     
-    if (index == NSNotFound) {
+    if (sender == folderItems.lastObject) {
         return;
     }
     
-    if ((index + 1) == folderItems.count) {
+    NSUInteger index = [folderItems indexOfObject:sender];
+    
+    if (index == NSNotFound) {
         return;
     }
     
