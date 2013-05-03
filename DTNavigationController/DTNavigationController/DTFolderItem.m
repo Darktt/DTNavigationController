@@ -17,12 +17,17 @@
 
 #import "DTFolderItem.h"
 
+// Background image
 #define kBackgroundImage @"FolderItemBgImage.png"
 #define kBackgroundHighlightedImage @""
 
+// View tag
 #define kBackgroundImageViewTag 1
 #define kTitleLabelTag          2
 #define kIconImageViewTag       3
+
+// Folder Name Limit Length
+#define kFolderNameLimitLength 10
 
 @interface DTFolderItem ()
 {
@@ -116,21 +121,31 @@
     [backgroundImageView setContentMode:UIViewContentModeScaleToFill];
     [backgroundImageView setAutoresizingMask:UIViewAutoresizingFlexibleHeight];
     
+    if (folderName.length > kFolderNameLimitLength) {
+        folderName = [folderName substringWithRange:NSMakeRange(0, kFolderNameLimitLength - 3)];
+        folderName = [folderName stringByAppendingString:@"..."];
+    }
+    
     UILabel *titleLabel = [[UILabel alloc] initWithFrame:CGRectZero];
     [titleLabel setText:folderName];
     [titleLabel sizeToFit];
-    [titleLabel setCenter:self.center];
     [titleLabel setBackgroundColor:[UIColor clearColor]];
     [titleLabel setTag:kTitleLabelTag];
     [titleLabel setAutoresizingMask:UIViewAutoresizingFlexibleTopMargin | UIViewAutoresizingFlexibleBottomMargin | UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleRightMargin];
+    
+    CGRect bgFrame = backgroundImageView.frame;
+    bgFrame.size.width = titleLabel.frame.size.width + 44.0f;
+    
+    // Resize self and backgroundImage, and change titleLabel position.
+    [backgroundImageView setFrame:bgFrame];
+    [self setFrame:bgFrame];
+    [titleLabel setCenter:self.center];
     
     [self addSubview:backgroundImageView];
     [self addSubview:titleLabel];
     
     [backgroundImageView release];
     [titleLabel release];
-    
-    [self sizeToFit];
 }
 
 - (void)setViewWithImage:(UIImage *)iconImage
