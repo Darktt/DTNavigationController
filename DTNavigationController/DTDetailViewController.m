@@ -110,12 +110,20 @@
         
         DTNavigationController *nav = (DTNavigationController *)self.navigationController;
         [nav setFolderBarHidden:YES animated:YES];
+        [nav.folderBar.actionButton addTarget:viewController action:@selector(puth:) forControlEvents:UIControlEventTouchUpInside];
+        
         [nav pushViewController:viewController animated:YES];
         [viewController release];
     }
     
     if (indexPath.row == 2) {
-        [self.navigationController popToRootViewControllerAnimated:YES];
+//        [self.navigationConotroller popToRootViewControllerAnimated:YES];
+        
+        DTViewController *viewController = [[DTViewController alloc] initWithNibName:@"DTViewController" bundle:nil];
+        [viewController setTitle:@"12345678901234567890"];
+        
+        [self.navigationController pushViewController:viewController animated:YES];
+        [viewController release];
     }
 }
 

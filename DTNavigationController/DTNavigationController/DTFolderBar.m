@@ -27,6 +27,9 @@
 #define kAddFolderDuration 0.2f
 #define kDeleteFolderDuration 0.2f
 
+#define kButtonType UIButtonTypeRoundedRect
+//#define kButtonType UIButtonTypeCustom
+
 typedef void (^DTAnimationsBlock) (void);
 typedef void (^DTCompletionBlock) (BOOL finshed);
 
@@ -34,6 +37,8 @@ typedef void (^DTCompletionBlock) (BOOL finshed);
 {
     DTFolderBarStyle _style;
     NSMutableArray *_folderItems; // Saved folderItem array
+    
+    UIButton *_actionButton;
 }
 
 @end
@@ -51,7 +56,7 @@ typedef void (^DTCompletionBlock) (BOOL finshed);
 
 + (id)folderBarWithFrame:(CGRect)frame style:(DTFolderBarStyle)style
 {
-    DTFolderBar *folderBar = [[[DTFolderBar alloc] initWithFrame:frame] autorelease];
+    DTFolderBar *folderBar = [[[DTFolderBar alloc] initWithFrame:frame style:style] autorelease];
     
     return folderBar;
 }
@@ -79,7 +84,20 @@ typedef void (^DTCompletionBlock) (BOOL finshed);
     [backgroundView setContentMode:UIViewContentModeScaleToFill];
     [backgroundView setAutoresizingMask:autoresizing];
     
-    UIScrollView *scrollView = [[UIScrollView alloc] initWithFrame:self.bounds];
+    CGRect scrollViewFrame = self.bounds;
+    
+    if (_style == DTFolderBarStyleFixedLeftButton) {
+        scrollViewFrame.size.width -= 44;
+        
+        CGRect actionButtomFrame = self.bounds;
+        actionButtomFrame.origin.x = scrollViewFrame.size.width - 2;
+        actionButtomFrame.size = CGSizeMake(44, 44);
+        
+        _actionButton = [UIButton buttonWithType:kButtonType];
+        [_actionButton setFrame:actionButtomFrame];
+    }
+    
+    UIScrollView *scrollView = [[UIScrollView alloc] initWithFrame:scrollViewFrame];
     [scrollView setTag:kScrollViewTag];
     [scrollView setShowsHorizontalScrollIndicator:NO];
     [scrollView setShowsVerticalScrollIndicator:NO];
@@ -97,6 +115,10 @@ typedef void (^DTCompletionBlock) (BOOL finshed);
     
     [self addSubview:backgroundView];
     [self addSubview:scrollView];
+    
+    if (_actionButton != nil) {
+        [self addSubview:_actionButton];
+    }
     
     [scrollView addSubview:folderItemView];
     
@@ -223,6 +245,13 @@ typedef void (^DTCompletionBlock) (BOOL finshed);
 {
     UIImageView *backgroundView = (UIImageView *)[self viewWithTag:kBackgroundViewTag];
     return backgroundView.image;
+}
+
+#pragma mark #ActionButton
+
+- (UIButton *)actionButton
+{
+    return _actionButton;
 }
 
 @end

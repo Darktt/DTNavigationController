@@ -151,7 +151,7 @@
 
 - (void)setViewWithImage:(UIImage *)iconImage
 {
-    UIEdgeInsets edgeInsets = UIEdgeInsetsMake(22.0f, 1.0f, 22.0f, 44.0f);
+    UIEdgeInsets edgeInsets = UIEdgeInsetsMake(20.0f, 1.0f, 20.0f, 44.0f);
     UIImage *bgImage = [[UIImage imageNamed:kBackgroundImage] resizableImageWithCapInsets:edgeInsets];
     UIImage *bgHighlightedImage = [[UIImage imageNamed:kBackgroundHighlightedImage] resizableImageWithCapInsets:edgeInsets];
     

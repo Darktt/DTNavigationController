@@ -10,4 +10,6 @@
 
 @interface DTViewController : UIViewController
 
+- (IBAction)puth:(id)sender;
+
 @end
