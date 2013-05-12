@@ -58,7 +58,7 @@ typedef void (^DTCompletionBlock) (BOOL finshed);
 	// Do any additional setup after loading the view.
     
     if (_folderBar == nil)
-        _folderBar = [DTFolderBar folderBarWithFrame:self.navigationBar.frame];
+        _folderBar = [DTFolderBar folderBarWithFrame:self.navigationBar.frame style:DTFolderBarStyleFixedLeftButton];
     
     [self.view addSubview:_folderBar];
 }
@@ -83,7 +83,7 @@ typedef void (^DTCompletionBlock) (BOOL finshed);
     [super pushViewController:viewController animated:animated];
     
     if (_folderBar == nil)
-        _folderBar = [DTFolderBar folderBarWithFrame:self.navigationBar.frame];
+        _folderBar = [DTFolderBar folderBarWithFrame:self.navigationBar.frame style:DTFolderBarStyleFixedLeftButton];
     
     NSMutableArray *folderItems = [NSMutableArray arrayWithArray:_folderBar.folderItems];
     DTFolderItem *folderItem = nil;

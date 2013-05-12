@@ -19,7 +19,7 @@
 
 enum {
     DTFolderBarStyleNormal = 0,
-    DTFolderBarStyleFixedLeftItemStyle,
+    DTFolderBarStyleFixedLeftButton,
 };
 typedef NSInteger DTFolderBarStyle;
 
@@ -27,6 +27,7 @@ typedef NSInteger DTFolderBarStyle;
 
 @property (nonatomic, retain) NSArray *folderItems;
 @property (nonatomic, retain) UIImage *backgroundImage; // Defaul is nil
+@property (nonatomic, readonly) UIButton *actionButton;
 
 + (id)folderBarWithFrame:(CGRect)frame;
 + (id)folderBarWithFrame:(CGRect)frame style:(DTFolderBarStyle)style;
