@@ -93,8 +93,11 @@ typedef void (^DTCompletionBlock) (BOOL finshed);
         actionButtomFrame.origin.x = scrollViewFrame.size.width - 2;
         actionButtomFrame.size = CGSizeMake(44, 44);
         
-        _actionButton = [UIButton buttonWithType:kButtonType];
-        [_actionButton setFrame:actionButtomFrame];
+        UIButton *actionButton = [UIButton buttonWithType:kButtonType];
+        [actionButton setFrame:actionButtomFrame];
+        [actionButton setAutoresizingMask:UIViewAutoresizingFlexibleLeftMargin | autoresizing];
+        
+        _actionButton = actionButton;
     }
     
     UIScrollView *scrollView = [[UIScrollView alloc] initWithFrame:scrollViewFrame];

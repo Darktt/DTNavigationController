@@ -26,8 +26,8 @@ typedef NSInteger DTFolderBarStyle;
 @interface DTFolderBar : UIView
 
 @property (nonatomic, retain) NSArray *folderItems;
-@property (nonatomic, retain) UIImage *backgroundImage; // Defaul is nil
-@property (nonatomic, readonly) UIButton *actionButton;
+@property (nonatomic, retain) UIImage *backgroundImage; // Defaul is nil.
+@property (nonatomic, readonly) UIButton *actionButton; // nil at DTFolderBarStyleNormal style.
 
 + (id)folderBarWithFrame:(CGRect)frame;
 + (id)folderBarWithFrame:(CGRect)frame style:(DTFolderBarStyle)style;
