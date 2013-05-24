@@ -17,14 +17,19 @@
 
 #import "DTNavigationController.h"
 
-#define kFolderItemIcon @"Home.png"
+// Config File
+#import "DTFolderConfig.h"
 
 typedef void (^DTAnimationsBlock) (void);
 typedef void (^DTCompletionBlock) (BOOL finshed);
 
 @interface DTNavigationController ()
 {
+    UIView *blockView;
     DTFolderBar *_folderBar;
+    DTFolderBarStyle _folderStyle;
+    
+    BOOL _actionEnable;
 }
 
 @end
@@ -35,19 +40,30 @@ typedef void (^DTCompletionBlock) (BOOL finshed);
 
 + (instancetype)navigationWithRootViewController:(UIViewController *)rootViewController
 {
-    DTNavigationController *nav = [[[DTNavigationController alloc] initWithRootViewController:rootViewController] autorelease];
+    DTNavigationController *nav = [[[DTNavigationController alloc] initWithRootViewController:rootViewController folderStyle:DTFolderBarStyleNormal] autorelease];
     
     return nav;
 }
 
-- (id)initWithRootViewController:(UIViewController *)rootViewController
++ (instancetype)navigationWithRootViewController:(UIViewController *)rootViewController folderStyle:(DTFolderBarStyle)folderStyle
 {
+    DTNavigationController *nav = [[[DTNavigationController alloc] initWithRootViewController:rootViewController folderStyle:folderStyle] autorelease];
+    
+    return nav;
+}
+
+- (id)initWithRootViewController:(UIViewController *)rootViewController folderStyle:(DTFolderBarStyle)folderStyle
+{
+    _folderStyle = folderStyle;
+    
     self = [super initWithRootViewController:rootViewController];
     
     if (self == nil) return nil;
     
     [self.view setAutoresizesSubviews:YES];
     [self.navigationBar setTintColor:[UIColor blackColor]];
+    
+    _actionEnable = NO;
     
     return self;
 }
@@ -57,10 +73,31 @@ typedef void (^DTCompletionBlock) (BOOL finshed);
     [super viewDidLoad];
 	// Do any additional setup after loading the view.
     
+    CGRect blockViewFrame = self.navigationBar.frame;
+    blockViewFrame.size.width -= 44.0f;
+    
+    blockView = [[[UIView alloc] initWithFrame:blockViewFrame] autorelease];
+    [blockView setBackgroundColor:[UIColor clearColor]];
+    [blockView setHidden:YES];
+    
     if (_folderBar == nil)
-        _folderBar = [DTFolderBar folderBarWithFrame:self.navigationBar.frame style:DTFolderBarStyleFixedLeftButton];
+        _folderBar = [[DTFolderBar folderBarWithFrame:self.navigationBar.frame style:_folderStyle] retain];
+    [_folderBar.actionButton addTarget:self action:@selector(showToolBar:) forControlEvents:UIControlEventTouchUpInside];
     
     [self.view addSubview:_folderBar];
+    [self.view addSubview:blockView];
+}
+
+- (void)viewWillAppear:(BOOL)animated
+{
+    [super viewWillAppear:animated];
+    [self rotateFolderBarForAppear];
+}
+
+- (void)viewWillDisappear:(BOOL)animated
+{
+    [super viewWillDisappear:animated];
+//    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(rotateFolderBar) name:@"" object:nil];
 }
 
 - (void)dealloc
@@ -83,29 +120,26 @@ typedef void (^DTCompletionBlock) (BOOL finshed);
     [super pushViewController:viewController animated:animated];
     
     if (_folderBar == nil)
-        _folderBar = [DTFolderBar folderBarWithFrame:self.navigationBar.frame style:DTFolderBarStyleFixedLeftButton];
+        _folderBar = [[DTFolderBar folderBarWithFrame:self.navigationBar.frame style:_folderStyle] retain];
     
     NSMutableArray *folderItems = [NSMutableArray arrayWithArray:_folderBar.folderItems];
     DTFolderItem *folderItem = nil;
     
     if (viewController.title == nil) {
         folderItem = [DTFolderItem itemWithImage:[UIImage imageNamed:kFolderItemIcon] targer:self action:@selector(tapFolderItem:)];
+        [_folderBar setLeftItem:folderItem];
     } else {
         folderItem = [DTFolderItem itemWithFolderName:viewController.title targer:self action:@selector(tapFolderItem:)];
+//        [folderItem.textLable setTextColor:[UIColor whiteColor]];
+        
+        [folderItems addObject:folderItem];
+        [_folderBar setFolderItems:folderItems animated:YES];
     }
-    
-    [folderItem setAutoresizingMask:UIViewAutoresizingFlexibleHeight];
-    [folderItem setAutoresizesSubviews:YES];
-    
-    
-    [folderItems addObject:folderItem];
-    
-    [_folderBar setFolderItems:folderItems animated:YES];
 }
 
 - (UIViewController *)popViewControllerAnimated:(BOOL)animated
 {
-    NSMutableArray *folderItems = [NSMutableArray arrayWithArray:self.folderBar.folderItems];
+    NSMutableArray *folderItems = [NSMutableArray arrayWithArray:_folderBar.folderItems];
     [folderItems removeLastObject];
     
     [_folderBar setFolderItems:folderItems animated:NO];
@@ -115,12 +149,20 @@ typedef void (^DTCompletionBlock) (BOOL finshed);
 
 - (NSArray *)popToRootViewControllerAnimated:(BOOL)animated
 {
-    NSMutableArray *folderItems = [NSMutableArray arrayWithArray:self.folderBar.folderItems];
+    if (_folderBar.leftItem != nil) {
+        [_folderBar setFolderItems:nil animated:YES];
+        
+        return [super popToRootViewControllerAnimated:animated];
+    }
+    
+    NSMutableArray *folderItems = [NSMutableArray arrayWithArray:_folderBar.folderItems];
+    
     NSRange range = NSMakeRange(1, folderItems.count - 1);
     
     [folderItems removeObjectsInRange:range];
     
     [_folderBar setFolderItems:folderItems animated:YES];
+    
     
     return [super popToRootViewControllerAnimated:YES];
 }
@@ -128,6 +170,30 @@ typedef void (^DTCompletionBlock) (BOOL finshed);
 - (DTFolderBar *)folderBar
 {
     return _folderBar;
+}
+
+- (void)setActionEnable:(BOOL)actionEnable
+{
+    _actionEnable = actionEnable;
+    
+    [blockView setHidden:!actionEnable];
+    [self setToolbarHidden:!actionEnable animated:YES];
+}
+
+- (BOOL)isActionEnable
+{
+    return _actionEnable;
+}
+
+#pragma mark - Button Action
+
+- (IBAction)showToolBar:(id)sender
+{
+    BOOL isShow = self.toolbarHidden;
+    _actionEnable = isShow;
+    
+    [blockView setHidden:!isShow];
+    [self setToolbarHidden:!isShow animated:YES];
 }
 
 #pragma mark - Folder Bar Methods
@@ -170,7 +236,7 @@ typedef void (^DTCompletionBlock) (BOOL finshed);
     return [_folderBar isHidden];
 }
 
-- (void)rotateFolderBar
+- (void)rotateFolderBarForAutoRotate
 {
     CGRect frame = _folderBar.frame;
     BOOL isPortraitOrientation = UIInterfaceOrientationIsPortrait([[UIApplication sharedApplication] statusBarOrientation]);
@@ -188,11 +254,35 @@ typedef void (^DTCompletionBlock) (BOOL finshed);
     [_folderBar setFrame:frame];
 }
 
+- (void)rotateFolderBarForAppear
+{
+    CGRect frame = _folderBar.frame;
+    BOOL isPortraitOrientation = UIInterfaceOrientationIsPortrait([[UIApplication sharedApplication] statusBarOrientation]);
+    UIScreen *screen = [UIScreen mainScreen];
+    CGFloat width = isPortraitOrientation ? screen.bounds.size.width : screen.bounds.size.height;
+    CGFloat height = isPortraitOrientation ? 44.0f : 32.0f;
+    
+    if (_folderBar.hidden) {
+        frame.origin.x = -width;
+        frame.size = CGSizeMake(width, height);
+    } else {
+        frame.size = CGSizeMake(width, height);
+    }
+    
+    [_folderBar setFrame:frame];
+}
+
 #pragma mark - Tap Folder Item Method
 
 - (IBAction)tapFolderItem:(DTFolderItem *)sender
 {
     [sender setHightlighted:YES];
+    
+    if (sender == _folderBar.leftItem) {
+        [self popToRootViewControllerAnimated:YES];
+        
+        return;
+    }
     
     NSMutableArray *folderItems = [NSMutableArray arrayWithArray:_folderBar.folderItems];
     
@@ -212,6 +302,10 @@ typedef void (^DTCompletionBlock) (BOOL finshed);
     
     [_folderBar setFolderItems:folderItems animated:YES];
     
+    if (_folderBar.style == DTFolderBarStyleFixedLeftHome || _folderBar.style == DTFolderBarStyleFixedHomeAndAtionButton) {
+        index += 1;
+    }
+    
     UIViewController *viewComtroller = [self.viewControllers objectAtIndex:index];
     
     [self popToViewController:viewComtroller animated:YES];
@@ -227,7 +321,7 @@ typedef void (^DTCompletionBlock) (BOOL finshed);
 - (void)willRotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation duration:(NSTimeInterval)duration
 {
     DTAnimationsBlock animations = ^{
-        [self rotateFolderBar];
+        [self rotateFolderBarForAutoRotate];
     };
     
     [UIView animateWithDuration:duration
@@ -235,22 +329,6 @@ typedef void (^DTCompletionBlock) (BOOL finshed);
                         options:UIViewAnimationOptionCurveEaseOut
                      animations:animations
                      completion:nil];
-}
-
-- (void)setImage:(UIImage *)image
-{
-    UIImageView *imageView = [[UIImageView alloc] initWithImage:image];
-    [imageView setFrame:self.view.bounds];
-    
-    [self.view addSubview:imageView];
-    [imageView release];
-}
-
-- (UIImage *)image
-{
-    UIImageView *imageView = (UIImageView *)[self.view viewWithTag:1];
-    
-    return imageView.image;
 }
 
 @end

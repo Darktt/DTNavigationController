@@ -21,10 +21,12 @@
 
 @interface DTNavigationController : UINavigationController
 
-@property (nonatomic, getter = isFolderBarHidden) BOOL folderBarHidden;
 @property (nonatomic, readonly) DTFolderBar *folderBar;
+@property (nonatomic, getter = isFolderBarHidden) BOOL folderBarHidden;
+@property (nonatomic, getter = isActionEnable) BOOL actionEnable;
 
 + (instancetype)navigationWithRootViewController:(UIViewController *)rootViewController;
++ (instancetype)navigationWithRootViewController:(UIViewController *)rootViewController folderStyle:(DTFolderBarStyle)folderStyle;
 
 - (void)setFolderBarHidden:(BOOL)folderBarHidden animated:(BOOL)animated;
 

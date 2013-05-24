@@ -17,17 +17,13 @@
 
 #import "DTFolderItem.h"
 
-// Background image
-#define kBackgroundImage            @"FolderItemBgImage.png"
-#define kBackgroundHighlightedImage @""
+// Config File
+#import "DTFolderConfig.h"
 
 // View tag
 #define kBackgroundImageViewTag 1
 #define kTitleLabelTag          2
 #define kIconImageViewTag       3
-
-// Folder Name Limit Length
-#define kFolderNameLimitLength 10
 
 @interface DTFolderItem ()
 {
@@ -65,6 +61,8 @@
     
     if (self == nil) return nil;
     [self setUserInteractionEnabled:YES];
+    [self setAutoresizingMask:UIViewAutoresizingFlexibleHeight];
+    [self setAutoresizesSubviews:YES];
     
     _targer = targer;
     _action = action;
@@ -88,6 +86,8 @@
     
     if (self == nil) return nil;
     [self setUserInteractionEnabled:YES];
+    [self setAutoresizingMask:UIViewAutoresizingFlexibleHeight];
+    [self setAutoresizesSubviews:YES];
     
     _targer = targer;
     _action = action;
@@ -104,7 +104,6 @@
 
 - (void)dealloc
 {
-    
     [super dealloc];
 }
 
@@ -112,7 +111,7 @@
 
 - (void)setViewWithFolderName:(NSString *)folderName
 {
-    UIEdgeInsets edgeInsets = UIEdgeInsetsMake(22.0f, 1.0f, 22.0f, 44.0f);
+    UIEdgeInsets edgeInsets = UIEdgeInsetsMake(20.0f, 1.0f, 20.0f, 44.0f);
     UIImage *bgImage = [[UIImage imageNamed:kBackgroundImage] resizableImageWithCapInsets:edgeInsets];
     UIImage *bgHighlightedImage = [[UIImage imageNamed:kBackgroundHighlightedImage] resizableImageWithCapInsets:edgeInsets];
     
@@ -244,6 +243,15 @@
     UIImageView *backgroundImageView = (UIImageView *)[self viewWithTag:kBackgroundImageViewTag];
     [backgroundImageView setImage:backgroundImage];
     [backgroundImageView setHighlightedImage:highlightedImage];
+}
+
+#pragma mark #TextLable
+
+- (UILabel *)textLable
+{
+    UILabel *titleLabel = (UILabel *)[self viewWithTag:kTitleLabelTag];
+    
+    return titleLabel;
 }
 
 @end

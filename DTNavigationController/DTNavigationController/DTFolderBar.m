@@ -18,17 +18,16 @@
 #import "DTFolderBar.h"
 #import "DTFolderItem.h"
 
+// Config file
+#import "DTFolderConfig.h"
+
 // View Tag
 #define kBackgroundViewTag 2
 #define kScrollViewTag 3
 #define kFolderItemViewTag 4
 
-// Animation Duration
-#define kAddFolderDuration 0.2f
-#define kDeleteFolderDuration 0.2f
-
-#define kButtonType UIButtonTypeRoundedRect
-//#define kButtonType UIButtonTypeCustom
+//#define kButtonType UIButtonTypeRoundedRect
+#define kButtonType UIButtonTypeCustom
 
 typedef void (^DTAnimationsBlock) (void);
 typedef void (^DTCompletionBlock) (BOOL finshed);
@@ -38,6 +37,7 @@ typedef void (^DTCompletionBlock) (BOOL finshed);
     DTFolderBarStyle _style;
     NSMutableArray *_folderItems; // Saved folderItem array
     
+    DTFolderItem *_leftItem;
     UIButton *_actionButton;
 }
 
@@ -86,16 +86,21 @@ typedef void (^DTCompletionBlock) (BOOL finshed);
     
     CGRect scrollViewFrame = self.bounds;
     
-    if (_style == DTFolderBarStyleFixedLeftButton) {
-        scrollViewFrame.size.width -= 44;
+    if (_style == DTFolderBarStyleFixedLeftHome || _style == DTFolderBarStyleFixedHomeAndAtionButton) {
+        scrollViewFrame.origin.x += 22.0f;
+        scrollViewFrame.size.width -= 22.0f;
+    }
+    
+    if (_style == DTFolderBarStyleActionButton || _style == DTFolderBarStyleFixedHomeAndAtionButton) {
+        scrollViewFrame.size.width -= 44.0f;
         
         CGRect actionButtomFrame = self.bounds;
-        actionButtomFrame.origin.x = scrollViewFrame.size.width - 2;
+        actionButtomFrame.origin.x = scrollViewFrame.origin.x + scrollViewFrame.size.width - 2;
         actionButtomFrame.size = CGSizeMake(44, 44);
         
         UIButton *actionButton = [UIButton buttonWithType:kButtonType];
         [actionButton setFrame:actionButtomFrame];
-        [actionButton setAutoresizingMask:UIViewAutoresizingFlexibleLeftMargin | autoresizing];
+        [actionButton setAutoresizingMask:UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleTopMargin | UIViewAutoresizingFlexibleBottomMargin];
         
         _actionButton = actionButton;
     }
@@ -152,12 +157,12 @@ typedef void (^DTCompletionBlock) (BOOL finshed);
         [_folderItems addObjectsFromArray:folderItems];
         
         DTFolderItem *folderItem = _folderItems.lastObject;
-        [self addFolderItem:folderItem animated:YES];
+        [self addFolderItem:folderItem animated:animated];
     } else {
         NSMutableArray *removedItems = [NSMutableArray arrayWithArray:_folderItems];
         [removedItems removeObjectsInArray:folderItems];
         [removedItems enumerateObjectsWithOptions:NSEnumerationReverse usingBlock:^(DTFolderItem *folderItem, NSUInteger idx, BOOL *stop){
-            [self deleteFolderItem:folderItem animated:YES];
+            [self deleteFolderItem:folderItem animated:animated];
         }];
         
         [_folderItems removeAllObjects];
@@ -236,6 +241,13 @@ typedef void (^DTCompletionBlock) (BOOL finshed);
 }
 
 #pragma mark - Overwrite Methods
+#pragma mark #Style
+
+- (DTFolderBarStyle)style
+{
+    return _style;
+}
+
 #pragma mark #Background Image
 
 - (void)setBackgroundImage:(UIImage *)backgroundImage
@@ -248,6 +260,50 @@ typedef void (^DTCompletionBlock) (BOOL finshed);
 {
     UIImageView *backgroundView = (UIImageView *)[self viewWithTag:kBackgroundViewTag];
     return backgroundView.image;
+}
+
+#pragma mark #LeftItem
+
+- (void)setLeftItem:(DTFolderItem *)leftItem
+{
+    if (_style == DTFolderBarStyleActionButton || _style == DTFolderBarStyleNormal) {
+        NSString *style = nil;
+        
+        switch (_style) {
+            case DTFolderBarStyleNormal:
+                style = @"DTFolderBarStyleNormal";
+                break;
+                
+            case DTFolderBarStyleActionButton:
+                style = @"DTFolderBarStyleActionButton";
+                break;
+                
+            default:
+                break;
+        }
+        
+        [NSException raise:NSInvalidArgumentException format:@"Style error, you style is %@", style];
+        
+        return;
+    }
+    
+    if (_leftItem != nil) {
+        [_leftItem removeFromSuperview];
+        _leftItem = nil;
+    }
+    
+    CGRect leftItemFrame = leftItem.frame;
+    leftItemFrame.origin = CGPointMake(0, 0);
+    
+    [leftItem setFrame:leftItemFrame];
+    
+    _leftItem = [leftItem retain];
+    [self addSubview:_leftItem];
+}
+
+- (DTFolderItem *)leftItem
+{
+    return _leftItem;
 }
 
 #pragma mark #ActionButton

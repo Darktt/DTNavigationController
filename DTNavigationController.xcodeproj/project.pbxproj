@@ -59,6 +59,8 @@
 		558868D1172A6509008FA5A3 /* DTNavigationController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DTNavigationController.m; sourceTree = "<group>"; };
 		558868D3172A7B55008FA5A3 /* DTFolderBar.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DTFolderBar.h; sourceTree = "<group>"; };
 		558868D4172A7B55008FA5A3 /* DTFolderBar.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DTFolderBar.m; sourceTree = "<group>"; };
+		55A011E0174EEEE2003C0DBC /* DTFolderStyle.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DTFolderStyle.h; sourceTree = "<group>"; };
+		55A011E1174EF160003C0DBC /* DTFolderConfig.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DTFolderConfig.h; sourceTree = "<group>"; };
 		55AC45FB172E0E600091D701 /* DTFolderItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DTFolderItem.h; sourceTree = "<group>"; };
 		55AC45FC172E0E600091D701 /* DTFolderItem.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DTFolderItem.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -151,6 +153,8 @@
 		558868D6172A7B6A008FA5A3 /* DTNavigationController */ = {
 			isa = PBXGroup;
 			children = (
+				55A011E0174EEEE2003C0DBC /* DTFolderStyle.h */,
+				55A011E1174EF160003C0DBC /* DTFolderConfig.h */,
 				558868D3172A7B55008FA5A3 /* DTFolderBar.h */,
 				558868D4172A7B55008FA5A3 /* DTFolderBar.m */,
 				55AC45FB172E0E600091D701 /* DTFolderItem.h */,
