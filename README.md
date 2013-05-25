@@ -1,6 +1,6 @@
 DTNavigationController with DTFolderBar
 ==========================
-![Linux-file-browser](./Raw/Image/Linux-file-browser.png)<br/>
+![Linux-file-browser](https://raw.github.com/Darktt/DTNavigationController/master/Raw/Image/Linux-file-browser.png)<br/>
 Like Linux file browser folder navigation view.
 
 ##Installation##
