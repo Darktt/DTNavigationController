@@ -22,8 +22,8 @@
 @property (nonatomic, retain) UIImage *backgroundImage;
 @property (nonatomic, retain) UIImage *highlightedImage;
 @property (nonatomic, getter = isHightlighted) BOOL hightlighted;
-@property (nonatomic, readonly) NSString *title;
-@property (nonatomic, readonly) UILabel *textLable;
+@property (nonatomic, readonly) NSString *title; // nil at use image
+@property (nonatomic, readonly) UILabel *textLable; // nil at use image
 
 + (id)itemWithFolderName:(NSString *)folderName targer:(id)targer action:(SEL)action;
 + (id)itemWithImage:(UIImage *)iconImage targer:(id)targer action:(SEL)action;
