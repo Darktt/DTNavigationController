@@ -72,6 +72,7 @@ typedef void (^DTCompletionBlock) (BOOL finshed);
 {
     [super viewDidLoad];
 	// Do any additional setup after loading the view.
+    [self.toolbar setBarStyle:UIBarStyleBlackOpaque];
     
     CGRect blockViewFrame = self.navigationBar.frame;
     blockViewFrame.size.width -= 44.0f;
@@ -127,10 +128,16 @@ typedef void (^DTCompletionBlock) (BOOL finshed);
     
     if (viewController.title == nil) {
         folderItem = [DTFolderItem itemWithImage:[UIImage imageNamed:kFolderItemIcon] targer:self action:@selector(tapFolderItem:)];
-        [_folderBar setLeftItem:folderItem];
+        
+        if (_folderStyle == DTFolderBarStyleFixedLeftHome || _folderStyle == DTFolderBarStyleFixedHomeAndAtionButton) {
+            [_folderBar setLeftItem:folderItem];
+        } else {
+            [folderItems addObject:folderItem];
+            [_folderBar setFolderItems:folderItems animated:YES];
+        }
     } else {
         folderItem = [DTFolderItem itemWithFolderName:viewController.title targer:self action:@selector(tapFolderItem:)];
-//        [folderItem.textLable setTextColor:[UIColor whiteColor]];
+        [folderItem.textLable setTextColor:kFolderItemTextColor];
         
         [folderItems addObject:folderItem];
         [_folderBar setFolderItems:folderItems animated:YES];

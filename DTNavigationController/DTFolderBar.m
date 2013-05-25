@@ -26,6 +26,7 @@
 #define kScrollViewTag 3
 #define kFolderItemViewTag 4
 
+// Button Type
 //#define kButtonType UIButtonTypeRoundedRect
 #define kButtonType UIButtonTypeCustom
 
@@ -80,6 +81,7 @@ typedef void (^DTCompletionBlock) (BOOL finshed);
     UIViewAutoresizing autoresizing = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
     
     UIImageView *backgroundView = [[UIImageView alloc] initWithFrame:self.bounds];
+    [backgroundView setImage:[UIImage imageNamed:kBarBlackgroundImage]];
     [backgroundView setTag:kBackgroundViewTag];
     [backgroundView setContentMode:UIViewContentModeScaleToFill];
     [backgroundView setAutoresizingMask:autoresizing];
@@ -99,6 +101,8 @@ typedef void (^DTCompletionBlock) (BOOL finshed);
         actionButtomFrame.size = CGSizeMake(44, 44);
         
         UIButton *actionButton = [UIButton buttonWithType:kButtonType];
+        [actionButton setBackgroundImage:[UIImage imageNamed:kActionButtonImage] forState:UIControlStateNormal];
+        [actionButton setBackgroundImage:[UIImage imageNamed:kActionButtonPressImage] forState:UIControlStateHighlighted];
         [actionButton setFrame:actionButtomFrame];
         [actionButton setAutoresizingMask:UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleTopMargin | UIViewAutoresizingFlexibleBottomMargin];
         

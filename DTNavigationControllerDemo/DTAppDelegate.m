@@ -26,10 +26,12 @@
     // Override point for customization after application launch.
     self.viewController = [[[DTViewController alloc] initWithNibName:@"DTViewController" bundle:nil] autorelease];
     
-    DTNavigationController *nav = [DTNavigationController navigationWithRootViewController:self.viewController folderStyle:DTFolderBarStyleNormal];
-    [nav.folderBar setBackgroundColor:[UIColor lightGrayColor]];
+    UINavigationController *nav = [[UINavigationController alloc] initWithRootViewController:_viewController];
+    [nav.navigationBar setBarStyle:UIBarStyleBlack];
     
     self.window.rootViewController = nav;
+    [nav release];
+    
     [self.window makeKeyAndVisible];
     return YES;
 }

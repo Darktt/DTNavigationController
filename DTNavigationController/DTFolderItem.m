@@ -112,8 +112,8 @@
 - (void)setViewWithFolderName:(NSString *)folderName
 {
     UIEdgeInsets edgeInsets = UIEdgeInsetsMake(20.0f, 1.0f, 20.0f, 44.0f);
-    UIImage *bgImage = [[UIImage imageNamed:kBackgroundImage] resizableImageWithCapInsets:edgeInsets];
-    UIImage *bgHighlightedImage = [[UIImage imageNamed:kBackgroundHighlightedImage] resizableImageWithCapInsets:edgeInsets];
+    UIImage *bgImage = [[UIImage imageNamed:kItemBackgroundImage] resizableImageWithCapInsets:edgeInsets];
+    UIImage *bgHighlightedImage = [[UIImage imageNamed:kItemBackgroundHighlightedImage] resizableImageWithCapInsets:edgeInsets];
     
     UIImageView *backgroundImageView = [[UIImageView alloc] initWithImage:bgImage highlightedImage:bgHighlightedImage];
     [backgroundImageView setFrame:self.frame];
@@ -151,8 +151,8 @@
 - (void)setViewWithImage:(UIImage *)iconImage
 {
     UIEdgeInsets edgeInsets = UIEdgeInsetsMake(20.0f, 1.0f, 20.0f, 44.0f);
-    UIImage *bgImage = [[UIImage imageNamed:kBackgroundImage] resizableImageWithCapInsets:edgeInsets];
-    UIImage *bgHighlightedImage = [[UIImage imageNamed:kBackgroundHighlightedImage] resizableImageWithCapInsets:edgeInsets];
+    UIImage *bgImage = [[UIImage imageNamed:kItemBackgroundImage] resizableImageWithCapInsets:edgeInsets];
+    UIImage *bgHighlightedImage = [[UIImage imageNamed:kItemBackgroundHighlightedImage] resizableImageWithCapInsets:edgeInsets];
     
     UIImageView *backgroundImageView = [[UIImageView alloc] initWithImage:bgImage highlightedImage:bgHighlightedImage];
     [backgroundImageView setFrame:self.frame];
