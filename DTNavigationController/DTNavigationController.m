@@ -20,6 +20,8 @@
 // Config File
 #import "DTFolderConfig.h"
 
+#define kUIApplicationChangeStatusBarFrameDuration 0.355
+
 typedef void (^DTAnimationsBlock) (void);
 typedef void (^DTCompletionBlock) (BOOL finshed);
 
@@ -93,12 +95,18 @@ typedef void (^DTCompletionBlock) (BOOL finshed);
 {
     [super viewWillAppear:animated];
     [self rotateFolderBarForAppear];
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(receiveStatusBarFrameChange:)
+                                                 name:UIApplicationWillChangeStatusBarFrameNotification
+                                               object:nil];
 }
 
 - (void)viewWillDisappear:(BOOL)animated
 {
     [super viewWillDisappear:animated];
-//    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(rotateFolderBar) name:@"" object:nil];
+    
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
 - (void)dealloc
@@ -316,6 +324,24 @@ typedef void (^DTCompletionBlock) (BOOL finshed);
     UIViewController *viewComtroller = [self.viewControllers objectAtIndex:index];
     
     [self popToViewController:viewComtroller animated:YES];
+}
+
+#pragma mark - Change StatusBar Frame Method
+
+- (void)receiveStatusBarFrameChange:(NSNotification *)sender
+{
+    CGRect statusBarFrame = [[UIApplication sharedApplication] statusBarFrame];
+    CGRect folderBarFrame = [_folderBar frame];
+    
+    if (statusBarFrame.size.height == 40) {
+        folderBarFrame.origin.y += statusBarFrame.size.height / 2;
+    } else {
+        folderBarFrame.origin.y -= statusBarFrame.size.height;
+    }
+    
+    [UIView animateWithDuration:kUIApplicationChangeStatusBarFrameDuration animations:^(){
+        [_folderBar setFrame:folderBarFrame];
+    }];
 }
 
 #pragma mark - Rotation View Method
