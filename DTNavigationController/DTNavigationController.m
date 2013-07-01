@@ -89,12 +89,6 @@ typedef void (^DTCompletionBlock) (BOOL finshed);
     
     [self.view addSubview:_folderBar];
     [self.view addSubview:blockView];
-}
-
-- (void)viewWillAppear:(BOOL)animated
-{
-    [super viewWillAppear:animated];
-    [self rotateFolderBarForAppear];
     
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(receiveStatusBarFrameChange:)
@@ -102,16 +96,24 @@ typedef void (^DTCompletionBlock) (BOOL finshed);
                                                object:nil];
 }
 
+- (void)viewWillAppear:(BOOL)animated
+{
+    [super viewWillAppear:animated];
+    [self rotateFolderBarForAppear];
+    
+    [self receiveStatusBarFrameChange:nil];
+}
+
 - (void)viewWillDisappear:(BOOL)animated
 {
     [super viewWillDisappear:animated];
-    
-    [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
 - (void)dealloc
 {
     [_folderBar release];
+    
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
     
     [super dealloc];
 }
@@ -334,9 +336,9 @@ typedef void (^DTCompletionBlock) (BOOL finshed);
     CGRect folderBarFrame = [_folderBar frame];
     
     if (statusBarFrame.size.height == 40) {
-        folderBarFrame.origin.y += statusBarFrame.size.height / 2;
+        folderBarFrame.origin.y = 40.0f;
     } else {
-        folderBarFrame.origin.y -= statusBarFrame.size.height;
+        folderBarFrame.origin.y = 20.0f;
     }
     
     [UIView animateWithDuration:kUIApplicationChangeStatusBarFrameDuration animations:^(){
