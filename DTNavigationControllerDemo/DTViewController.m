@@ -7,6 +7,8 @@
 //
 
 #import "DTViewController.h"
+#import "DTRelease.h"
+
 #import "DTDemoViewController.h"
 
 #import "DTNavigationController.h"
@@ -29,7 +31,8 @@
     [table setDelegate:self];
     
     [self setView:table];
-    [table release];
+    
+    DTRelease(table);
 }
 
 - (void)didReceiveMemoryWarning
@@ -61,7 +64,8 @@
     static NSString *CellIdentifier = @"Cell";
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
     if (cell == nil) {
-        cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier] autorelease];
+        UITableViewCell *_cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier];
+        cell = DTAutorelease(_cell);
         [cell setAccessoryType:UITableViewCellAccessoryDisclosureIndicator];
     }
     
@@ -94,7 +98,7 @@
 {
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
     
-    DTFolderBarStyle style;
+    DTFolderBarStyle style = DTFolderBarStyleNormal;
     
     if (indexPath.row == 0) {
         style = DTFolderBarStyleNormal;

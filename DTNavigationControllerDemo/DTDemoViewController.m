@@ -7,6 +7,7 @@
 //
 
 #import "DTDemoViewController.h"
+#import "DTRelease.h"
 
 #import "DTNavigationController.h"
 
@@ -21,9 +22,9 @@
 
 + (id)demoWithFolderNumber:(NSInteger)folderNumber
 {
-    DTDemoViewController *demo = [[[DTDemoViewController alloc] initWithFolderNumer:folderNumber] autorelease];
+    DTDemoViewController *demo = [[DTDemoViewController alloc] initWithFolderNumer:folderNumber];
     
-    return demo;
+    return DTAutorelease(demo);
 }
 
 - (id)initWithFolderNumer:(NSInteger)folderNumber
@@ -88,7 +89,8 @@
     static NSString *CellIdentifier = @"Cell";
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
     if (cell == nil) {
-        cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier] autorelease];
+        UITableViewCell *_cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier];
+        cell = DTAutorelease(_cell);
         [cell setAccessoryType:UITableViewCellAccessoryDisclosureIndicator];
     }
     

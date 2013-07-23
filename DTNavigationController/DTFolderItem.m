@@ -16,6 +16,7 @@
 // limitations under the License.
 
 #import "DTFolderItem.h"
+#import "DTRelease.h"
 
 // Config File
 #import "DTFolderConfig.h"
@@ -39,16 +40,16 @@
 
 + (id)itemWithFolderName:(NSString *)folderName targer:(id)targer action:(SEL)action
 {
-    DTFolderItem *folderItem = [[[DTFolderItem alloc] initWithFolderName:folderName targer:targer action:action] autorelease];
+    DTFolderItem *folderItem = [[DTFolderItem alloc] initWithFolderName:folderName targer:targer action:action];
     
-    return folderItem;
+    return DTAutorelease(folderItem);
 }
 
 + (id)itemWithImage:(UIImage *)iconImage targer:(id)targer action:(SEL)action
 {
-    DTFolderItem *folderItem = [[[DTFolderItem alloc] initWithImage:iconImage targer:targer action:action] autorelease];
+    DTFolderItem *folderItem = [[DTFolderItem alloc] initWithImage:iconImage targer:targer action:action];
     
-    return folderItem;
+    return DTAutorelease(folderItem);
 }
 
 - (id)initWithFolderName:(NSString *)folderName targer:(id)targer action:(SEL)action
@@ -72,7 +73,7 @@
     UITapGestureRecognizer *tapGesture = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(tapItem:)];
     
     [self addGestureRecognizer:tapGesture];
-    [tapGesture release];
+    DTRelease(tapGesture);
     
     return self;
 }
@@ -97,15 +98,19 @@
     UITapGestureRecognizer *tapGesture = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(tapItem:)];
     
     [self addGestureRecognizer:tapGesture];
-    [tapGesture release];
+    DTRelease(tapGesture);
     
     return self;
 }
+
+#ifndef USE_ARC_MODE
 
 - (void)dealloc
 {
     [super dealloc];
 }
+
+#endif
 
 #pragma mark - Set Subvies
 
@@ -144,8 +149,8 @@
     [self addSubview:backgroundImageView];
     [self addSubview:titleLabel];
     
-    [backgroundImageView release];
-    [titleLabel release];
+    DTRelease(backgroundImageView);
+    DTRelease(titleLabel);
 }
 
 - (void)setViewWithImage:(UIImage *)iconImage
@@ -169,8 +174,8 @@
     [self addSubview:backgroundImageView];
     [self addSubview:iconImageView];
     
-    [backgroundImageView release];
-    [iconImageView release];
+    DTRelease(backgroundImageView);
+    DTRelease(iconImageView);
 }
 
 #pragma mark - Gesture Recognizer Method

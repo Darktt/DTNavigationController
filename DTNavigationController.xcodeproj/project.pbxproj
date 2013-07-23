@@ -44,6 +44,8 @@
 		55375AF517506A500045B905 /* ActionBtn@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "ActionBtn@2x.png"; sourceTree = "<group>"; };
 		55375AF617506A500045B905 /* ActionBtnPress.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = ActionBtnPress.png; sourceTree = "<group>"; };
 		55375AF717506A500045B905 /* ActionBtnPress@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "ActionBtnPress@2x.png"; sourceTree = "<group>"; };
+		556D90AE179E2B1D000FAB82 /* DTInstancetype.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DTInstancetype.h; sourceTree = "<group>"; };
+		556D90AF179E2B2C000FAB82 /* DTRelease.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DTRelease.h; sourceTree = "<group>"; };
 		557EE8BE172E7630004E2695 /* FolderItemBgImage.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = FolderItemBgImage.png; sourceTree = "<group>"; };
 		557EE8BF172E7630004E2695 /* FolderItemBgImage@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "FolderItemBgImage@2x.png"; sourceTree = "<group>"; };
 		557EE8C2172E7D22004E2695 /* Home.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Home.png; sourceTree = "<group>"; };
@@ -166,6 +168,8 @@
 		558868D6172A7B6A008FA5A3 /* DTNavigationController */ = {
 			isa = PBXGroup;
 			children = (
+				556D90AE179E2B1D000FAB82 /* DTInstancetype.h */,
+				556D90AF179E2B2C000FAB82 /* DTRelease.h */,
 				55A011E0174EEEE2003C0DBC /* DTFolderStyle.h */,
 				55A011E1174EF160003C0DBC /* DTFolderConfig.h */,
 				558868D3172A7B55008FA5A3 /* DTFolderBar.h */,
@@ -345,6 +349,7 @@
 		558868CE172A64D4008FA5A3 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CLANG_ENABLE_OBJC_ARC = NO;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "$(SRCROOT)/DTNavigationControllerDemo/DTNavigationController-Prefix.pch";
 				INFOPLIST_FILE = "$(SRCROOT)/DTNavigationControllerDemo/DTNavigationController-Info.plist";
@@ -356,6 +361,7 @@
 		558868CF172A64D4008FA5A3 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CLANG_ENABLE_OBJC_ARC = NO;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "$(SRCROOT)/DTNavigationControllerDemo/DTNavigationController-Prefix.pch";
 				INFOPLIST_FILE = "$(SRCROOT)/DTNavigationControllerDemo/DTNavigationController-Info.plist";

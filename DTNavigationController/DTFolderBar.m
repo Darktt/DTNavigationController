@@ -16,6 +16,9 @@
 // limitations under the License.
 
 #import "DTFolderBar.h"
+#import "DTRelease.h"
+
+// Subclass
 #import "DTFolderItem.h"
 
 // Config file
@@ -50,16 +53,16 @@ typedef void (^DTCompletionBlock) (BOOL finshed);
 
 + (id)folderBarWithFrame:(CGRect)frame
 {
-    DTFolderBar *folderBar = [[[DTFolderBar alloc] initWithFrame:frame] autorelease];
+    DTFolderBar *folderBar = [[DTFolderBar alloc] initWithFrame:frame];
     
-    return folderBar;
+    return DTAutorelease(folderBar);
 }
 
 + (id)folderBarWithFrame:(CGRect)frame style:(DTFolderBarStyle)style
 {
-    DTFolderBar *folderBar = [[[DTFolderBar alloc] initWithFrame:frame style:style] autorelease];
+    DTFolderBar *folderBar = [[DTFolderBar alloc] initWithFrame:frame style:style];
     
-    return folderBar;
+    return DTAutorelease(folderBar);
 }
 
 - (id)initWithFrame:(CGRect)frame
@@ -134,18 +137,22 @@ typedef void (^DTCompletionBlock) (BOOL finshed);
     
     [scrollView addSubview:folderItemView];
     
-    [backgroundView release];
-    [scrollView release];
-    [folderItemView release];
+    DTRelease(backgroundView);
+    DTRelease(scrollView);
+    DTRelease(folderItemView);
     
     return self;
 }
+
+#ifndef USE_ARC_MODE
 
 - (void)dealloc
 {
     [_folderItems release];
     [super dealloc];
 }
+
+#endif
 
 #pragma mark - Add Folder Item Methods
 
@@ -301,7 +308,7 @@ typedef void (^DTCompletionBlock) (BOOL finshed);
     
     [leftItem setFrame:leftItemFrame];
     
-    _leftItem = [leftItem retain];
+    _leftItem = leftItem;
     [self addSubview:_leftItem];
 }
 

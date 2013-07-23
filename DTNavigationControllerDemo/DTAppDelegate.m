@@ -7,11 +7,14 @@
 //
 
 #import "DTAppDelegate.h"
+#import "DTRelease.h"
 
 #import "DTViewController.h"
 #import "DTNavigationController.h"
 
 @implementation DTAppDelegate
+
+#ifndef USE_ARC_MODE
 
 - (void)dealloc
 {
@@ -20,17 +23,21 @@
     [super dealloc];
 }
 
+#endif
+
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
-    self.window = [[[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]] autorelease];
+    UIWindow *window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
+    self.window = DTAutorelease(window);
     // Override point for customization after application launch.
-    self.viewController = [[[DTViewController alloc] initWithNibName:@"DTViewController" bundle:nil] autorelease];
+    DTViewController *viewController = [[DTViewController alloc] initWithNibName:@"DTViewController" bundle:nil];
+    self.viewController = DTAutorelease(viewController);
     
     UINavigationController *nav = [[UINavigationController alloc] initWithRootViewController:_viewController];
     [nav.navigationBar setBarStyle:UIBarStyleBlack];
     
     self.window.rootViewController = nav;
-    [nav release];
+    DTRelease(nav);
     
     [self.window makeKeyAndVisible];
     return YES;

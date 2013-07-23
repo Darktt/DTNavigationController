@@ -16,6 +16,8 @@
 // limitations under the License.
 
 #import <UIKit/UIKit.h>
+#import "DTInstancetype.h"
+
 #import "DTFolderBar.h"
 #import "DTFolderItem.h"
 
@@ -25,8 +27,8 @@
 @property (nonatomic, getter = isFolderBarHidden) BOOL folderBarHidden;
 @property (nonatomic, getter = isActionEnable) BOOL actionEnable;
 
-+ (instancetype)navigationWithRootViewController:(UIViewController *)rootViewController;
-+ (instancetype)navigationWithRootViewController:(UIViewController *)rootViewController folderStyle:(DTFolderBarStyle)folderStyle;
++ (DTInstancetype)navigationWithRootViewController:(UIViewController *)rootViewController;
++ (DTInstancetype)navigationWithRootViewController:(UIViewController *)rootViewController folderStyle:(DTFolderBarStyle)folderStyle;
 
 - (void)setFolderBarHidden:(BOOL)folderBarHidden animated:(BOOL)animated;
 

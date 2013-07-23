@@ -17,6 +17,9 @@
 
 #import "DTNavigationController.h"
 
+// ARC control class
+#import "DTRelease.h"
+
 // Config File
 #import "DTFolderConfig.h"
 
@@ -40,18 +43,18 @@ typedef void (^DTCompletionBlock) (BOOL finshed);
 
 #pragma mark - Initialize Class
 
-+ (instancetype)navigationWithRootViewController:(UIViewController *)rootViewController
++ (DTInstancetype)navigationWithRootViewController:(UIViewController *)rootViewController
 {
-    DTNavigationController *nav = [[[DTNavigationController alloc] initWithRootViewController:rootViewController folderStyle:DTFolderBarStyleNormal] autorelease];
+    DTNavigationController *nav = [[DTNavigationController alloc] initWithRootViewController:rootViewController folderStyle:DTFolderBarStyleNormal];
     
-    return nav;
+    return DTAutorelease(nav);
 }
 
-+ (instancetype)navigationWithRootViewController:(UIViewController *)rootViewController folderStyle:(DTFolderBarStyle)folderStyle
++ (DTInstancetype)navigationWithRootViewController:(UIViewController *)rootViewController folderStyle:(DTFolderBarStyle)folderStyle
 {
-    DTNavigationController *nav = [[[DTNavigationController alloc] initWithRootViewController:rootViewController folderStyle:folderStyle] autorelease];
+    DTNavigationController *nav = [[DTNavigationController alloc] initWithRootViewController:rootViewController folderStyle:folderStyle];
     
-    return nav;
+    return DTAutorelease(nav);
 }
 
 - (id)initWithRootViewController:(UIViewController *)rootViewController folderStyle:(DTFolderBarStyle)folderStyle
@@ -79,12 +82,13 @@ typedef void (^DTCompletionBlock) (BOOL finshed);
     CGRect blockViewFrame = self.navigationBar.frame;
     blockViewFrame.size.width -= 44.0f;
     
-    blockView = [[[UIView alloc] initWithFrame:blockViewFrame] autorelease];
+    UIView *_blockView = [[UIView alloc] initWithFrame:blockViewFrame];
+    blockView = DTAutorelease(_blockView);
     [blockView setBackgroundColor:[UIColor clearColor]];
     [blockView setHidden:YES];
     
     if (_folderBar == nil)
-        _folderBar = [[DTFolderBar folderBarWithFrame:self.navigationBar.frame style:_folderStyle] retain];
+        _folderBar = [DTFolderBar folderBarWithFrame:self.navigationBar.frame style:_folderStyle];
     [_folderBar.actionButton addTarget:self action:@selector(showToolBar:) forControlEvents:UIControlEventTouchUpInside];
     
     [self.view addSubview:_folderBar];
@@ -99,7 +103,7 @@ typedef void (^DTCompletionBlock) (BOOL finshed);
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
-    [self rotateFolderBarForAppear];
+    [self rotateFolderBarWithInterfaceOrientation:[[UIApplication sharedApplication] statusBarOrientation]];
     
     [self receiveStatusBarFrameChange:nil];
 }
@@ -109,14 +113,16 @@ typedef void (^DTCompletionBlock) (BOOL finshed);
     [super viewWillDisappear:animated];
 }
 
+#ifndef USE_ARC_MODE
+
 - (void)dealloc
 {
-    [_folderBar release];
-    
     [[NSNotificationCenter defaultCenter] removeObserver:self];
     
     [super dealloc];
 }
+
+#endif
 
 - (void)didReceiveMemoryWarning
 {
@@ -131,12 +137,12 @@ typedef void (^DTCompletionBlock) (BOOL finshed);
     [super pushViewController:viewController animated:animated];
     
     if (_folderBar == nil)
-        _folderBar = [[DTFolderBar folderBarWithFrame:self.navigationBar.frame style:_folderStyle] retain];
+        _folderBar = [DTFolderBar folderBarWithFrame:self.navigationBar.frame style:_folderStyle];
     
     NSMutableArray *folderItems = [NSMutableArray arrayWithArray:_folderBar.folderItems];
     DTFolderItem *folderItem = nil;
     
-    if (viewController.title == nil) {
+    if (viewController.title == nil && self.viewControllers.count == 1) {
         folderItem = [DTFolderItem itemWithImage:[UIImage imageNamed:kFolderItemIcon] targer:self action:@selector(tapFolderItem:)];
         
         if (_folderStyle == DTFolderBarStyleFixedLeftHome || _folderStyle == DTFolderBarStyleFixedHomeAndAtionButton) {
@@ -253,36 +259,22 @@ typedef void (^DTCompletionBlock) (BOOL finshed);
     return [_folderBar isHidden];
 }
 
-- (void)rotateFolderBarForAutoRotate
+- (void)rotateFolderBarWithInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
 {
     CGRect frame = _folderBar.frame;
-    BOOL isPortraitOrientation = UIInterfaceOrientationIsPortrait([[UIApplication sharedApplication] statusBarOrientation]);
+    BOOL isPortraitOrientation = UIInterfaceOrientationIsPortrait(interfaceOrientation);
     UIScreen *screen = [UIScreen mainScreen];
-    CGFloat width = isPortraitOrientation ? screen.bounds.size.height : screen.bounds.size.width;
-    CGFloat height = isPortraitOrientation ? 32.0f : 44.0f;
     
-    if (_folderBar.hidden) {
-        frame.origin.x = -width;
-        frame.size = CGSizeMake(width, height);
-    } else {
-        frame.size = CGSizeMake(width, height);
-    }
-    
-    [_folderBar setFrame:frame];
-}
-
-- (void)rotateFolderBarForAppear
-{
-    CGRect frame = _folderBar.frame;
-    BOOL isPortraitOrientation = UIInterfaceOrientationIsPortrait([[UIApplication sharedApplication] statusBarOrientation]);
-    UIScreen *screen = [UIScreen mainScreen];
+    CGFloat yPosition = isPortraitOrientation ? frame.origin.y : 20.0f;
     CGFloat width = isPortraitOrientation ? screen.bounds.size.width : screen.bounds.size.height;
     CGFloat height = isPortraitOrientation ? 44.0f : 32.0f;
     
     if (_folderBar.hidden) {
-        frame.origin.x = -width;
+//        frame.origin.x = -width;
+        frame.origin = CGPointMake(-width, yPosition);
         frame.size = CGSizeMake(width, height);
     } else {
+        frame.origin.y = yPosition;
         frame.size = CGSizeMake(width, height);
     }
     
@@ -332,12 +324,15 @@ typedef void (^DTCompletionBlock) (BOOL finshed);
 
 - (void)receiveStatusBarFrameChange:(NSNotification *)sender
 {
-    CGRect statusBarFrame = [[UIApplication sharedApplication] statusBarFrame];
+    UIApplication *application = [UIApplication sharedApplication];
+    BOOL isPortraitOrientation = UIInterfaceOrientationIsPortrait([application statusBarOrientation]);
+    
+    CGRect statusBarFrame = [application statusBarFrame];
     CGRect folderBarFrame = [_folderBar frame];
     
-    if (statusBarFrame.size.height == 40) {
-        folderBarFrame.origin.y = 40.0f;
-    } else {
+    folderBarFrame.origin.y = statusBarFrame.size.height;
+    
+    if (!isPortraitOrientation) {
         folderBarFrame.origin.y = 20.0f;
     }
     
@@ -355,8 +350,10 @@ typedef void (^DTCompletionBlock) (BOOL finshed);
 
 - (void)willRotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation duration:(NSTimeInterval)duration
 {
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
+    
     DTAnimationsBlock animations = ^{
-        [self rotateFolderBarForAutoRotate];
+        [self rotateFolderBarWithInterfaceOrientation:toInterfaceOrientation];
     };
     
     [UIView animateWithDuration:duration
@@ -364,6 +361,24 @@ typedef void (^DTCompletionBlock) (BOOL finshed);
                         options:UIViewAnimationOptionCurveEaseOut
                      animations:animations
                      completion:nil];
+}
+
+- (void)didRotateFromInterfaceOrientation:(UIInterfaceOrientation)fromInterfaceOrientation
+{
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(receiveStatusBarFrameChange:)
+                                                 name:UIApplicationWillChangeStatusBarFrameNotification
+                                               object:nil];
+    
+    BOOL isPortraitOrientation = UIInterfaceOrientationIsPortrait([[UIApplication sharedApplication] statusBarOrientation]);
+    CGRect statusBarFrame = [[UIApplication sharedApplication] statusBarFrame];
+    
+    CGRect folderFrame = _folderBar.frame;
+    folderFrame.origin.y = statusBarFrame.size.height;
+    
+    if (isPortraitOrientation) {
+        [_folderBar setFrame:folderFrame];
+    }
 }
 
 @end

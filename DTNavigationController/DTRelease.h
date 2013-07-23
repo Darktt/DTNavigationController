@@ -16,8 +16,9 @@
 
 #if __has_feature(objc_arc)
 
+    #define USE_ARC_MODE
     #define DTAutorelease( expression )  expression
-    #define DTRelease( expression )      expression
+    #define DTRelease( expression )
     #define DTRetain( expression )       expression
 
 #else
