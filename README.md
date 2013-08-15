@@ -6,11 +6,11 @@ Like Linux file browser folder navigation view.
 
 ![Linux-file-browser](https://raw.github.com/Darktt/DTNavigationController/master/Raw/Image/Linux-file-browser.png)
 
-##Installation##
-Drag the <code>DTNavigationController</code> folder into your project.
+## Installation
+Drag the <code>**DTNavigationController**</code> folder into your project.
 
-##Usage##
-Import the header file and declare your controlle.
+## Usage
+Import the header file and declare your controller.
 
 	#import "DTNavigationController.h"
 
@@ -37,12 +37,12 @@ To set folder hidden
 [navigation isFolderBarHidden];
 ```
 
-Set action on actionButton at DTFolderBarStyleActionButton & DTFolderBarStyleFixedHomeAndAtionButton style
+Set action on actionButton at **DTFolderBarStyleActionButton** & **DTFolderBarStyleFixedHomeAndAtionButton** style
 ``` objective-c
-[navigation.folderBar.actionButton addTarget:yourViewController action:@selector(puth:) forControlEvents:UIControlEventTouchUpInside];
+[navigation.folderBar.actionButton addTarget:yourViewController action:@selector(push:) forControlEvents:UIControlEventTouchUpInside];
 ```
 
-##License##
+## License
 Licensed under the Apache License, Version 2.0 (the "License");  
 you may not use this file except in compliance with the License.  
 You may obtain a copy of the License at
