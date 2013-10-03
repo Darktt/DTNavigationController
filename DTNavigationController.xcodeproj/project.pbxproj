@@ -354,6 +354,7 @@
 				GCC_PREFIX_HEADER = "$(SRCROOT)/DTNavigationControllerDemo/DTNavigationController-Prefix.pch";
 				INFOPLIST_FILE = "$(SRCROOT)/DTNavigationControllerDemo/DTNavigationController-Info.plist";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
 				WRAPPER_EXTENSION = app;
 			};
 			name = Debug;
@@ -366,6 +367,7 @@
 				GCC_PREFIX_HEADER = "$(SRCROOT)/DTNavigationControllerDemo/DTNavigationController-Prefix.pch";
 				INFOPLIST_FILE = "$(SRCROOT)/DTNavigationControllerDemo/DTNavigationController-Info.plist";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
 				WRAPPER_EXTENSION = app;
 			};
 			name = Release;

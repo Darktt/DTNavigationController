@@ -87,8 +87,10 @@ typedef void (^DTCompletionBlock) (BOOL finshed);
     [blockView setBackgroundColor:[UIColor clearColor]];
     [blockView setHidden:YES];
     
-    if (_folderBar == nil)
+    if (_folderBar == nil) {
         _folderBar = [DTFolderBar folderBarWithFrame:self.navigationBar.frame style:_folderStyle];
+    }
+    
     [_folderBar.actionButton addTarget:self action:@selector(showToolBar:) forControlEvents:UIControlEventTouchUpInside];
     
     [self.view addSubview:_folderBar];
@@ -332,13 +334,24 @@ typedef void (^DTCompletionBlock) (BOOL finshed);
     
     folderBarFrame.origin.y = statusBarFrame.size.height;
     
-    if (!isPortraitOrientation) {
+    if (!isPortraitOrientation || [self systemVersionIsGreateThanOrEqualVersion:@"7.0"]) {
         folderBarFrame.origin.y = 20.0f;
     }
     
     [UIView animateWithDuration:kUIApplicationChangeStatusBarFrameDuration animations:^(){
         [_folderBar setFrame:folderBarFrame];
     }];
+}
+
+- (BOOL)systemVersionIsGreateThanOrEqualVersion:(NSString *)version
+{
+    NSString *currentVersion = [[UIDevice currentDevice] systemVersion];
+    
+    if ([currentVersion compare:version options:NSNumericSearch] != NSOrderedAscending) {
+        return YES;
+    }
+    
+    return NO;
 }
 
 #pragma mark - Rotation View Method
